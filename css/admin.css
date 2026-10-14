@@ -682,3 +682,46 @@
     flex: 1;
   }
 }
+
+/* -----------------------------------------------------------------------------
+   8. ADMIN RAZORPAY CONFIGURATION CARD
+   ----------------------------------------------------------------------------- */
+.admin-card-header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.admin-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--c-choco-950);
+  margin-bottom: 2px;
+}
+
+.admin-card-subtitle {
+  font-size: 0.8rem;
+  color: var(--c-choco-600);
+}
+
+.admin-rzp-config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 14px;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.admin-rzp-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .admin-rzp-config-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

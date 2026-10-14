@@ -851,6 +851,53 @@ const Admin = (function () {
     const resetBtn = document.getElementById('adminResetDemoBtn');
     if (resetBtn) resetBtn.addEventListener('click', resetDemoData);
 
+    // Razorpay Credentials Settings wiring
+    const rzpKeyInput = document.getElementById('adminRzpKeyInput');
+    const rzpSecretInput = document.getElementById('adminRzpSecretInput');
+    const rzpBadge = document.getElementById('adminRzpKeyStatusBadge');
+    const rzpSaveBtn = document.getElementById('adminSaveRzpKeyBtn');
+    const rzpResetBtn = document.getElementById('adminResetRzpKeyBtn');
+
+    function updateRzpAdminBadge() {
+      const savedKey = localStorage.getItem('aavasa_razorpay_key_id') || '';
+      if (rzpKeyInput) rzpKeyInput.value = savedKey;
+      if (rzpSecretInput) rzpSecretInput.value = localStorage.getItem('aavasa_razorpay_key_secret') || '';
+      if (rzpBadge) {
+        if (savedKey) {
+          rzpBadge.textContent = `🟢 Key Connected (${savedKey.substring(0, 10)}...)`;
+          rzpBadge.className = 'badge badge-green';
+        } else {
+          rzpBadge.textContent = '⚡ Sandbox Active';
+          rzpBadge.className = 'badge badge-orange';
+        }
+      }
+    }
+    updateRzpAdminBadge();
+
+    if (rzpSaveBtn) {
+      rzpSaveBtn.addEventListener('click', () => {
+        const k = (rzpKeyInput ? rzpKeyInput.value : '').trim();
+        const s = (rzpSecretInput ? rzpSecretInput.value : '').trim();
+        if (!k) {
+          Cart.showToast('Please enter your Razorpay Key ID');
+          return;
+        }
+        localStorage.setItem('aavasa_razorpay_key_id', k);
+        if (s) localStorage.setItem('aavasa_razorpay_key_secret', s);
+        updateRzpAdminBadge();
+        Cart.showToast('Razorpay credentials saved and synced with Checkout!', 'green');
+      });
+    }
+
+    if (rzpResetBtn) {
+      rzpResetBtn.addEventListener('click', () => {
+        localStorage.removeItem('aavasa_razorpay_key_id');
+        localStorage.removeItem('aavasa_razorpay_key_secret');
+        updateRzpAdminBadge();
+        Cart.showToast('Reset to default Smart Sandbox Mode.');
+      });
+    }
+
     // Table Row Action Buttons (Delegated)
     const tableBody = document.getElementById('adminOrdersTableBody');
     if (tableBody) {
