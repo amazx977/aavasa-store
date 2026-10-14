@@ -516,11 +516,38 @@ const Tracker = (function () {
       copyBtn.addEventListener('click', copyAwb);
     }
 
-    // Auto-load demo order if on dedicated track.html page or if requested via URL param
+    // Auto-load order if on dedicated track.html page or if requested via URL param
     if (window.location.pathname.includes('track') || window.location.search.includes('track')) {
       const urlParams = new URLSearchParams(window.location.search);
-      const queryOrder = urlParams.get('id') || 'PRE-2026-7842';
-      setTimeout(() => trackOrder(queryOrder), 150);
+      const isConfirmed = urlParams.get('confirmed');
+      const paymentId = urlParams.get('payment_id') || urlParams.get('razorpay_payment_id');
+      let queryOrder = urlParams.get('id');
+
+      if (isConfirmed || paymentId) {
+        const banner = document.getElementById('orderConfirmedBanner');
+        if (banner) {
+          banner.classList.remove('d-none');
+          if (paymentId) {
+            const bannerText = document.getElementById('confirmedBannerText');
+            if (bannerText) {
+              bannerText.textContent = `Payment ID ${paymentId} cleared via Razorpay. Batch 01 allocation locked and assigned to BlueDart Air Express.`;
+            }
+          }
+        }
+      }
+
+      if (!queryOrder && (isConfirmed || paymentId)) {
+        try {
+          const latest = localStorage.getItem('aavasa_latest_order');
+          if (latest) {
+            const parsed = JSON.parse(latest);
+            queryOrder = parsed.orderId;
+          }
+        } catch (e) {}
+      }
+
+      const targetOrder = queryOrder || 'PRE-2026-7842';
+      setTimeout(() => trackOrder(targetOrder), 150);
     }
 
     // Connect cart drawer triggers if present on tracking page

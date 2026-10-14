@@ -526,3 +526,50 @@
   background: #f7f5f2;
   font-weight: 700;
 }
+
+/* --------------------------------------------------------------------------
+   Post-Payment Order Confirmed Celebration Banner
+   -------------------------------------------------------------------------- */
+.order-confirmed-banner {
+  background: linear-gradient(135deg, #1b4332 0%, #081c15 100%);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 760px;
+  margin: -70px auto 30px auto;
+  box-shadow: 0 10px 30px rgba(27, 67, 50, 0.25);
+  border: 1.5px solid rgba(116, 198, 157, 0.4);
+  position: relative;
+  z-index: 12;
+}
+
+.confirmed-banner-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--c-green-600);
+  color: #fff;
+  font-size: 1.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(46, 111, 64, 0.4);
+}
+
+.confirmed-banner-content h3 {
+  color: #d8f3dc;
+  font-size: 1.25rem;
+  margin: 0 0 6px 0;
+}
+
+.confirmed-banner-content p {
+  color: #b7e4c7;
+  font-size: 0.88rem;
+  margin: 0;
+  line-height: 1.4;
+}

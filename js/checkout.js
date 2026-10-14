@@ -25,6 +25,20 @@ const Checkout = (function () {
      1. INITIALIZATION & ORDER SUMMARY RENDERING
      -------------------------------------------------------------------------- */
   function initPageCheckout() {
+    // Check if customer was redirected back from bank/UPI app
+    const urlParams = new URLSearchParams(window.location.search);
+    const rzpPayId = urlParams.get('razorpay_payment_id');
+    if (rzpPayId) {
+      try {
+        const pending = localStorage.getItem('aavasa_pending_preorder');
+        if (pending) {
+          const data = JSON.parse(pending);
+          finalizePreOrder(data.customer, rzpPayId, 'RAZORPAY (ONLINE)');
+          return;
+        }
+      } catch (e) {}
+    }
+
     const totals = Cart.getTotals();
     const emptyState = document.getElementById('checkoutEmptyState');
     const activeGrid = document.getElementById('checkoutActiveGrid');
@@ -252,12 +266,29 @@ const Checkout = (function () {
       // Non-blocking fallback to standard client-side Razorpay checkout
     }
 
+    // Store pending pre-order before opening Razorpay
+    try {
+      localStorage.setItem('aavasa_pending_preorder', JSON.stringify({
+        customer: address,
+        items: totals.items,
+        subtotal: totals.subtotal,
+        discount: totals.discount,
+        total: finalTotal,
+        time: Date.now()
+      }));
+    } catch (e) {}
+
     try {
       const rzp = new Razorpay(options);
       rzp.on('payment.failed', function (resp) {
         resetButton();
         const errDesc = resp.error ? resp.error.description : 'Payment failed';
-        Cart.showToast(`Razorpay transaction note: ${errDesc}`);
+        console.error('Razorpay payment failed:', resp.error);
+        if (errDesc && errDesc.toLowerCase().includes('website')) {
+          alert(`Razorpay Account Configuration Notice:\n\n${errDesc}\n\nPlease add https://aavasa-store.vercel.app to your Razorpay Dashboard under Account & Settings -> Business Profile -> Website / App Details.`);
+        } else {
+          Cart.showToast(`Razorpay notice: ${errDesc}`);
+        }
       });
       rzp.open();
     } catch (err) {
@@ -268,7 +299,7 @@ const Checkout = (function () {
   }
 
   /* --------------------------------------------------------------------------
-     4. ORDER FINALIZATION, PERSISTENCE & TRACKING SCREEN
+     4. ORDER FINALIZATION, PERSISTENCE & REDIRECTION
      -------------------------------------------------------------------------- */
   function finalizePreOrder(address, paymentId, paymentMethodTitle) {
     const totals = Cart.getTotals();
@@ -288,7 +319,9 @@ const Checkout = (function () {
 
     const newOrder = {
       orderId: orderNum,
+      awb: awb,
       date: now.toISOString(),
+      createdAt: now.toISOString(),
       displayDate: now.toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'short',
@@ -297,61 +330,35 @@ const Checkout = (function () {
         minute: '2-digit'
       }),
       customer: address,
+      recipient: {
+        name: address.name,
+        phone: address.phone,
+        email: address.email,
+        address: address.address,
+        city: address.city,
+        state: address.state,
+        pin: address.pin
+      },
       items: totals.items.map(i => ({ ...i })),
       subtotal: totals.subtotal,
       discount: totals.discount,
       shipping: 0,
       shippingMethod: 'standard',
       total: finalTotal,
-      awb: awb,
       courier: 'BlueDart Air Express (Priority Freight)',
       status: 'Pre-Order Confirmed',
+      statusClass: 'in-transit',
+      statusText: 'Batch 01 Allocation Locked • BlueDart Priority Cargo',
       currentStage: 1, // Stage 1 of 5
+      stepIndex: 1,
       eta: etaStr,
       paymentMethod: paymentMethodTitle || 'RAZORPAY (ONLINE)',
       paymentId: paymentId,
+      paymentStatus: 'Paid & Verified via Razorpay',
       source: 'checkout_razorpay',
-      trackingSteps: [
-        {
-          stage: 1,
-          name: 'Pre-Order & Razorpay Verified',
-          desc: `Batch allocation confirmed. Payment ID ${paymentId} cleared via RBI 3D Secure.`,
-          date: 'Just now',
-          completed: true,
-          current: true
-        },
-        {
-          stage: 2,
-          name: 'Kannauj Lab Maceration',
-          desc: '28-day slow cold-maturation in progress. Gas Chromatography purity check.',
-          date: 'Est. 3 days',
-          completed: false,
-          current: false
-        },
-        {
-          stage: 3,
-          name: 'Velvet Box Packed & Sealed',
-          desc: 'Individually numbered bottle placed in padded crushproof luxury keepsake box.',
-          date: 'Est. 4 days',
-          completed: false,
-          current: false
-        },
-        {
-          stage: 4,
-          name: 'BlueDart Air Express Transit',
-          desc: `Air cargo manifest issued under AWB ${awb}. Kannauj Hub to Destination Airport.`,
-          date: 'Est. 5 days',
-          completed: false,
-          current: false
-        },
-        {
-          stage: 5,
-          name: 'Doorstep Delivery & Unboxing',
-          desc: 'Final contactless handoff. Verified 6+ hour longevity guarantee begins.',
-          date: 'Est. 6 days',
-          completed: false,
-          current: false
-        }
+      logs: [
+        { status: `Razorpay Payment Authorized (${paymentId})`, time: 'Just now', hub: 'RBI 3D Secure Live Network', latest: true },
+        { status: 'Pre-Order Reserved & Batch 01 Locked', time: '5 mins ago', hub: 'Kannauj Master Perfumery Lab' }
       ],
       checkpoints: [
         {
@@ -378,6 +385,8 @@ const Checkout = (function () {
       if (!Array.isArray(orders)) orders = [];
       orders.unshift(newOrder);
       localStorage.setItem('aavasa_tracked_orders', JSON.stringify(orders));
+      localStorage.setItem('aavasa_latest_order', JSON.stringify(newOrder));
+      localStorage.removeItem('aavasa_pending_preorder');
     } catch (e) {
       console.warn('Could not persist to localStorage:', e);
     }
@@ -385,13 +394,12 @@ const Checkout = (function () {
     // Clear cart after checkout
     Cart.clearCart();
 
-    // Render Confirmation & Tracking Screen
-    renderConfirmationTrackingScreen(newOrder);
-
-    // Scroll smoothly to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
+    // Show toast and redirect immediately to dedicated order confirmation & tracking page
     Cart.showToast(`🎉 Pre-Order ${newOrder.orderId} Confirmed with BlueDart Air Tracking!`, 'green');
+
+    setTimeout(() => {
+      window.location.href = `track.html?id=${encodeURIComponent(newOrder.orderId)}&confirmed=1&payment_id=${encodeURIComponent(paymentId)}`;
+    }, 400);
   }
 
   function renderConfirmationTrackingScreen(order) {
