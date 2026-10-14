@@ -526,6 +526,62 @@ const Checkout = (function () {
         });
       }
 
+      // Coupon Application on Checkout
+      const applyCouponBtn = document.getElementById('pageApplyCouponBtn');
+      const couponInput = document.getElementById('pageCouponInput');
+
+      function handleApplyCoupon() {
+        const code = couponInput ? couponInput.value.trim() : '';
+        const res = Cart.applyCouponCode(code);
+        if (res.success) {
+          Cart.showToast(res.message, 'green');
+        } else {
+          Cart.showToast(res.message);
+        }
+        renderPageOrderSummary();
+      }
+
+      if (applyCouponBtn) {
+        applyCouponBtn.addEventListener('click', handleApplyCoupon);
+      }
+
+      if (couponInput) {
+        const totals = Cart.getTotals();
+        if (totals.activeCouponCode) {
+          couponInput.value = totals.activeCouponCode;
+        }
+
+        couponInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handleApplyCoupon();
+          }
+        });
+      }
+
+      // Handle item quantity updates and removals in Checkout Summary
+      const summaryItemsList = document.getElementById('pageSummaryItemsList');
+      if (summaryItemsList) {
+        summaryItemsList.addEventListener('click', (e) => {
+          const qtyBtn = e.target.closest('[data-action="checkout-qty"]');
+          if (qtyBtn) {
+            const id = qtyBtn.getAttribute('data-id');
+            const delta = parseInt(qtyBtn.getAttribute('data-delta'), 10) || 0;
+            Cart.updateQty(id, delta);
+            initPageCheckout();
+            return;
+          }
+
+          const removeBtn = e.target.closest('[data-action="checkout-remove"]');
+          if (removeBtn) {
+            const id = removeBtn.getAttribute('data-id');
+            Cart.removeItem(id);
+            initPageCheckout();
+            return;
+          }
+        });
+      }
+
       // Print Invoice button on confirmation
       const printInvoiceBtn = document.getElementById('confirmPrintInvoiceBtn');
       if (printInvoiceBtn) {

@@ -13,7 +13,8 @@ const Cart = (function () {
   const VALID_COUPONS = {
     'BOLD10': { type: 'percent', value: 0.10, desc: '10% Off Perfume Longevity Sale' },
     'AAVASA15': { type: 'percent', value: 0.15, desc: '15% Off VIP Member Discount' },
-    'FREESHIP': { type: 'freeship', value: 0, desc: 'Free Express Delivery Across India' }
+    'FREESHIP': { type: 'freeship', value: 0, desc: 'Free Express Delivery Across India' },
+    'TRIAL100': { type: 'trial1', value: 1, desc: '100% Trial Discount (Payable ₹1 for Live/Test Gateway Verification)' }
   };
 
   function getItems() {
@@ -112,7 +113,10 @@ const Cart = (function () {
 
     if (activeCouponCode && VALID_COUPONS[activeCouponCode]) {
       const coupon = VALID_COUPONS[activeCouponCode];
-      if (coupon.type === 'percent') {
+      if (coupon.type === 'trial1') {
+        shipping = 0;
+        discount = Math.max(0, subtotal - 1);
+      } else if (coupon.type === 'percent') {
         discount = Math.round(subtotal * coupon.value);
       } else if (coupon.type === 'freeship') {
         shipping = 0;
@@ -145,7 +149,7 @@ const Cart = (function () {
       setActiveCoupon(cleanCode);
       return { success: true, message: `Coupon ${cleanCode} applied! ${VALID_COUPONS[cleanCode].desc}` };
     } else {
-      return { success: false, message: 'Invalid coupon code. Try BOLD10 or FREESHIP' };
+      return { success: false, message: 'Invalid coupon code. Try TRIAL100, BOLD10 or AAVASA15' };
     }
   }
 
