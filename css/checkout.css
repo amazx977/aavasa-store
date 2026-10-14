@@ -1,11 +1,11 @@
 /**
  * AAVASA / The Bold Rose Luxury Perfumes
- * Dedicated Checkout & Payment Portal Stylesheet
- * Strict Palette: Chocolate Brown, Cream, Burnt Orange, Green
+ * Dedicated Checkout & Razorpay Payment Portal Stylesheet
+ * Strict Palette: Chocolate Brown, Cream, Burnt Orange, Forest Green
  */
 
 /* --------------------------------------------------------------------------
-   1. CHECKOUT PAGE LAYOUT
+   1. CHECKOUT PAGE LAYOUT & HEADER
    -------------------------------------------------------------------------- */
 .checkout-page-body {
   background-color: var(--c-cream-100);
@@ -31,6 +31,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .checkout-brand {
@@ -47,7 +49,26 @@
   color: var(--c-orange-400);
 }
 
-.checkout-header-badge {
+.checkout-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.razorpay-header-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(2, 132, 199, 0.2);
+  color: #38bdf8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.ssl-header-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -55,9 +76,9 @@
   color: #72d98f;
   font-size: 0.78rem;
   font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(114, 217, 143, 0.4);
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(114, 217, 143, 0.35);
 }
 
 .checkout-back-link {
@@ -90,14 +111,11 @@
    -------------------------------------------------------------------------- */
 .checkout-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  grid-template-columns: 1.45fr 1fr;
   gap: 32px;
   align-items: start;
 }
 
-/* --------------------------------------------------------------------------
-   3. LEFT COLUMN: STEPS & GATEWAY CARD
-   -------------------------------------------------------------------------- */
 .checkout-flow-card {
   background-color: var(--c-cream-50);
   border: 1px solid var(--c-cream-300);
@@ -108,119 +126,19 @@
   overflow: hidden;
 }
 
-/* Express 1-Click Bar */
-.express-checkout-box {
-  background: linear-gradient(135deg, var(--c-choco-900), var(--c-choco-800));
-  border-radius: var(--radius-md);
-  padding: 16px 20px;
-  margin-bottom: 24px;
-  color: var(--c-cream-100);
-}
-
-.express-checkout-title {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--c-orange-400);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.express-btn-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.express-pay-btn {
-  background-color: var(--c-choco-950);
-  border: 1px solid var(--c-choco-700);
-  border-radius: var(--radius-sm);
-  color: var(--c-cream-50);
-  padding: 10px;
-  font-weight: 700;
-  font-size: 0.84rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
-}
-
-.express-pay-btn:hover {
-  background-color: var(--c-choco-800);
-  border-color: var(--c-orange-500);
-}
-
-.express-pay-btn.upi {
-  border-color: rgba(200, 90, 23, 0.4);
-}
-
-/* Stepper Bar */
-.checkout-stepper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  margin-bottom: 28px;
-  padding-bottom: 20px;
+/* --------------------------------------------------------------------------
+   3. CHECKOUT BLOCKS & STEPS
+   -------------------------------------------------------------------------- */
+.checkout-block {
   border-bottom: 1px solid var(--c-cream-300);
+  padding-bottom: 24px;
 }
 
-.checkout-step-node {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--c-choco-500);
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
+.checkout-block:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
-.step-node-bubble {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: var(--c-cream-200);
-  color: var(--c-choco-700);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-  font-weight: 700;
-  border: 2px solid var(--c-cream-300);
-  transition: all var(--transition-fast);
-}
-
-.checkout-step-node.active {
-  color: var(--c-orange-600);
-}
-
-.checkout-step-node.active .step-node-bubble {
-  background-color: var(--c-orange-500);
-  border-color: var(--c-orange-600);
-  color: #fff;
-  box-shadow: 0 0 0 4px rgba(200, 90, 23, 0.15);
-}
-
-.checkout-step-node.completed {
-  color: var(--c-green-800);
-}
-
-.checkout-step-node.completed .step-node-bubble {
-  background-color: var(--c-green-700);
-  border-color: var(--c-green-800);
-  color: #fff;
-}
-
-/* Step Headers */
 .step-heading-wrap {
   display: flex;
   align-items: center;
@@ -228,40 +146,61 @@
   margin-bottom: 18px;
 }
 
-.step-heading-wrap h3 {
-  font-size: 1.25rem;
+.step-number-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-number-title h3 {
+  font-size: 1.22rem;
   margin: 0;
   color: var(--c-choco-900);
+}
+
+.step-badge-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--c-orange-500);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .autofill-btn {
   background-color: var(--c-cream-200);
   border: 1px solid var(--c-cream-400);
   border-radius: var(--radius-sm);
-  padding: 5px 12px;
+  padding: 6px 12px;
   font-size: 0.78rem;
   font-weight: 700;
   color: var(--c-choco-800);
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .autofill-btn:hover {
   background-color: var(--c-cream-300);
+  border-color: var(--c-choco-500);
 }
 
-/* Forms */
 .checkout-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 14px;
 }
 
 .checkout-form-grid.triple {
   grid-template-columns: 1.2fr 1fr 1fr;
 }
 
-/* Shipping Batch Options */
+/* --------------------------------------------------------------------------
+   4. SHIPPING BATCH SELECTION
+   -------------------------------------------------------------------------- */
 .shipping-batch-card {
   border: 2px solid var(--c-cream-300);
   border-radius: var(--radius-md);
@@ -298,127 +237,262 @@
   height: 18px;
 }
 
-/* --------------------------------------------------------------------------
-   4. PAYMENT GATEWAY PORTAL
-   -------------------------------------------------------------------------- */
-.payment-portal-tabs {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 24px;
+.shipping-batch-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--c-choco-900);
 }
 
-.payment-portal-tab {
-  background-color: var(--c-cream-100);
-  border: 2px solid var(--c-cream-300);
-  border-radius: var(--radius-md);
-  padding: 12px 8px;
-  text-align: center;
-  cursor: pointer;
+.shipping-batch-sub {
+  font-size: 0.78rem;
+  color: var(--c-choco-500);
+  margin-top: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   5. RAZORPAY PAYMENT METHODS SELECTION
+   -------------------------------------------------------------------------- */
+.payment-selection-box {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.payment-method-card {
+  border: 2px solid var(--c-cream-300);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  cursor: pointer;
+  display: flex;
   align-items: center;
-  gap: 4px;
-  font-weight: 700;
-  font-size: 0.84rem;
-  color: var(--c-choco-800);
+  justify-content: space-between;
+  gap: 16px;
+  background-color: #fff;
   transition: all var(--transition-fast);
 }
 
-.payment-portal-tab:hover {
+.payment-method-card:hover {
   border-color: var(--c-orange-400);
 }
 
-.payment-portal-tab.active {
-  background-color: #fff;
+.payment-method-card.selected {
   border-color: var(--c-orange-500);
-  color: var(--c-orange-600);
-  box-shadow: 0 4px 12px rgba(200, 90, 23, 0.12);
+  background-color: var(--c-orange-50);
+  box-shadow: 0 4px 12px rgba(200, 90, 23, 0.08);
 }
 
-.tab-sub-hint {
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: var(--c-choco-500);
+.payment-card-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
 }
 
-.payment-portal-tab.active .tab-sub-hint {
-  color: var(--c-green-700);
-  font-weight: 700;
+.payment-card-left input[type="radio"] {
+  margin-top: 4px;
+  accent-color: var(--c-orange-600);
+  width: 18px;
+  height: 18px;
 }
 
-.payment-panel-view {
-  background-color: #fff;
-  border: 1px solid var(--c-cream-300);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  margin-bottom: 24px;
-}
-
-/* UPI Gateway Section */
-.upi-gateway-box {
+.payment-card-title {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-bottom: 20px;
-  background-color: var(--c-cream-50);
-  padding: 20px;
-  border-radius: var(--radius-md);
-  border: 1px dashed var(--c-cream-400);
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--c-choco-900);
 }
 
-.upi-qr-display {
-  width: 130px;
-  height: 130px;
-  background-color: #fff;
-  border-radius: var(--radius-md);
-  padding: 8px;
-  box-shadow: var(--shadow-sm);
+.payment-card-desc {
+  font-size: 0.78rem;
+  color: var(--c-choco-500);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.razorpay-logo-badge {
+  background-color: #f0f7ff;
+  border: 1px solid #bae6fd;
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--c-cream-300);
-  flex-shrink: 0;
 }
 
-.upi-qr-display svg {
-  width: 100%;
-  height: 100%;
+/* Razorpay Highlight Banner */
+.razorpay-highlight-banner {
+  background: linear-gradient(135deg, #0C2340 0%, #08182B 100%);
+  color: #fff;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 18px;
+  border: 1px solid #1E3A5F;
 }
 
-.upi-gateway-info {
-  flex: 1;
-}
-
-.upi-app-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 10px 0;
-}
-
-.upi-app-chip {
-  background-color: #fff;
-  border: 1px solid var(--c-cream-400);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  font-size: 0.74rem;
+.razorpay-banner-title {
   font-weight: 700;
-  color: var(--c-choco-800);
-}
-
-.upi-copy-row {
-  display: inline-flex;
+  font-size: 0.95rem;
+  display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #fff;
-  border: 1px solid var(--c-cream-400);
-  padding: 6px 12px;
+  color: #38bdf8;
+  margin-bottom: 10px;
+}
+
+.razorpay-banner-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.rzp-icon-pill {
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-sm);
-  font-family: monospace;
-  font-size: 0.85rem;
+  padding: 4px 10px;
+  font-size: 0.74rem;
   font-weight: 700;
-  color: var(--c-choco-900);
+  color: #e0f2fe;
+}
+
+.razorpay-banner-text {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+/* COD Highlight Banner */
+.cod-highlight-banner {
+  background-color: var(--c-green-50);
+  border: 1px solid rgba(46, 111, 64, 0.3);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  color: var(--c-green-800);
+  margin-bottom: 18px;
+}
+
+.cod-banner-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--c-green-900);
+  margin-bottom: 4px;
+}
+
+.cod-highlight-banner p {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  margin: 0;
+  color: var(--c-green-800);
+}
+
+.checkout-trust-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.76rem;
+  color: var(--c-choco-500);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   6. ORDER CONFIRMATION & FULL TRACKING SCREEN
+   -------------------------------------------------------------------------- */
+.confirmation-tracking-view {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.confirmation-success-banner {
+  text-align: center;
+  padding: 10px 0 24px;
+  border-bottom: 1px solid var(--c-cream-300);
+  margin-bottom: 24px;
+}
+
+.confirmation-success-banner .success-icon-badge {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background-color: var(--c-green-100);
+  color: var(--c-green-700);
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 24px rgba(46, 111, 64, 0.18);
+}
+
+.confirmation-success-banner h2 {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  color: var(--c-choco-950);
+  margin-bottom: 8px;
+}
+
+.confirmation-subtitle {
+  font-size: 0.92rem;
+  color: var(--c-choco-600);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Key Identifiers Card */
+.confirm-ids-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  background-color: #fff;
+  border: 1px solid var(--c-cream-300);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.confirm-id-column {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.confirm-meta-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-choco-500);
+}
+
+.confirm-order-num {
+  font-family: monospace;
+  font-size: 1.05rem;
+  color: var(--c-orange-600);
+  font-weight: 700;
+}
+
+.confirm-pay-id {
+  font-size: 0.72rem;
+  color: var(--c-choco-500);
+  font-family: monospace;
+}
+
+.confirm-awb-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--c-choco-800);
 }
 
 .copy-mini-btn {
@@ -426,152 +500,136 @@
   color: #fff;
   border: none;
   border-radius: var(--radius-sm);
-  padding: 3px 8px;
-  font-size: 0.72rem;
+  padding: 2px 7px;
+  font-size: 0.7rem;
   font-weight: 700;
   cursor: pointer;
 }
 
-.card-autofill-wrap {
-  text-align: right;
-  margin-bottom: 12px;
-}
-
-.card-preview-micro-label {
-  font-size: 0.65rem;
-  color: var(--c-cream-400);
-}
-
-.card-preview-right-col {
-  text-align: right;
-}
-
-/* Card Mockup */
-.card-preview-container {
-  max-width: 380px;
-  margin: 0 auto 20px;
-  background: linear-gradient(135deg, #2C1A14 0%, #150A06 100%);
-  color: var(--c-cream-100);
-  border-radius: 14px;
+/* Stepper on Confirmation Screen */
+.confirm-stepper-wrap {
+  background-color: #fff;
+  border: 1px solid var(--c-cream-300);
+  border-radius: var(--radius-md);
   padding: 22px 24px;
-  box-shadow: 0 12px 30px rgba(44, 26, 20, 0.35);
-  border: 1px solid rgba(200, 90, 23, 0.3);
-}
-
-.card-preview-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
 }
 
-.card-chip-box {
-  width: 40px;
-  height: 28px;
-  background: linear-gradient(135deg, #d4af37 0%, #aa820a 100%);
-  border-radius: 4px;
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
-}
-
-.card-network-logo {
-  font-family: var(--font-serif);
+.confirm-stepper-title {
+  font-size: 0.82rem;
   font-weight: 700;
+  text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--c-orange-400);
-  font-size: 1rem;
-}
-
-.card-number-display {
-  font-family: monospace;
-  font-size: 1.22rem;
-  letter-spacing: 0.15em;
-  color: var(--c-cream-50);
+  color: var(--c-choco-600);
   margin-bottom: 20px;
 }
 
-.card-preview-bottom {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-}
-
-.card-holder-name {
-  font-weight: 700;
-  color: var(--c-cream-100);
-  font-size: 0.85rem;
-}
-
-/* NetBanking Grid */
-.netbanking-banks-grid {
+/* Logistics Breakdown Grid */
+.confirm-logistics-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
 }
 
-.bank-option-card {
+.confirm-logs-box,
+.confirm-details-box {
+  background-color: #fff;
   border: 1px solid var(--c-cream-300);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  cursor: pointer;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.confirm-logs-box h4,
+.confirm-details-box h4 {
+  font-size: 0.92rem;
+  margin: 0 0 14px 0;
+  color: var(--c-choco-900);
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.86rem;
-  font-weight: 600;
-  background-color: #fff;
-  transition: border-color var(--transition-fast);
+  gap: 8px;
 }
 
-.bank-option-card:hover {
-  border-color: var(--c-orange-500);
+.confirm-logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.bank-option-card.selected {
-  border-color: var(--c-orange-500);
-  background-color: var(--c-orange-50);
-  color: var(--c-orange-700);
+.confirm-log-item {
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid var(--c-cream-300);
 }
 
-/* COD Assurance Box */
-.cod-assurance-box {
-  background-color: var(--c-green-50);
-  border: 1px solid rgba(46, 111, 64, 0.3);
-  border-radius: var(--radius-md);
-  padding: 18px 20px;
-  color: var(--c-green-800);
-  margin-bottom: 16px;
+.confirm-log-item.latest {
+  border-left-color: var(--c-orange-500);
 }
 
-.cod-assurance-box h4 {
-  font-size: 0.95rem;
-  margin-bottom: 6px;
-  color: var(--c-green-900);
+.confirm-log-item::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--c-cream-400);
 }
 
-.cod-assurance-box p {
-  font-size: 0.82rem;
-  line-height: 1.45;
-  margin: 0;
-  color: var(--c-green-800);
+.confirm-log-item.latest::before {
+  background-color: var(--c-orange-500);
+  box-shadow: 0 0 0 3px rgba(200, 90, 23, 0.2);
 }
 
-/* Security Badges Row */
-.security-badges-row {
+.confirm-log-status {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--c-choco-900);
+}
+
+.confirm-log-meta {
+  font-size: 0.74rem;
+  color: var(--c-choco-500);
+  margin-top: 2px;
+}
+
+.confirm-address-display {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--c-choco-700);
+}
+
+.confirm-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.confirm-item-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--c-cream-200);
+  font-size: 0.84rem;
+}
+
+.confirm-actions-footer {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 16px;
-  padding-top: 18px;
+  gap: 14px;
+  padding-top: 20px;
   border-top: 1px solid var(--c-cream-300);
-  font-size: 0.76rem;
-  color: var(--c-choco-500);
 }
 
 /* --------------------------------------------------------------------------
-   5. RIGHT COLUMN: STICKY ORDER SUMMARY
+   7. RIGHT COLUMN: STICKY PRE-ORDER SUMMARY
    -------------------------------------------------------------------------- */
 .checkout-summary-card {
   background-color: var(--c-cream-50);
@@ -721,83 +779,8 @@
 }
 
 /* --------------------------------------------------------------------------
-   6. PROCESSING OVERLAY & SUCCESS STATE
+   8. EMPTY STATE CARD
    -------------------------------------------------------------------------- */
-.checkout-processing-overlay {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(250, 246, 240, 0.96);
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  text-align: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity var(--transition-normal), visibility var(--transition-normal);
-}
-
-.checkout-processing-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.checkout-success-view {
-  display: none;
-  text-align: center;
-  padding: 20px 0;
-}
-
-.checkout-success-view.active {
-  display: block;
-}
-
-.success-icon-badge {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background-color: var(--c-green-100);
-  color: var(--c-green-700);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  font-size: 2.2rem;
-  box-shadow: 0 8px 24px rgba(46, 111, 64, 0.2);
-}
-
-.success-info-card {
-  background-color: #fff;
-  border: 1px solid var(--c-cream-300);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  margin: 24px auto;
-  max-width: 520px;
-  text-align: left;
-}
-
-.success-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px dashed var(--c-cream-300);
-  font-size: 0.88rem;
-}
-
-.success-row:last-child {
-  border-bottom: none;
-}
-
-.success-ref-id {
-  font-family: monospace;
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--c-orange-600);
-}
-
-/* Empty State Card */
 .checkout-empty-card {
   background-color: var(--c-cream-50);
   border: 1px solid var(--c-cream-300);
@@ -809,13 +792,13 @@
   box-shadow: var(--shadow-sm);
 }
 
-.checkout-empty-card svg {
+.empty-icon-wrap {
   color: var(--c-choco-400);
   margin-bottom: 16px;
 }
 
 /* --------------------------------------------------------------------------
-   7. RESPONSIVE BREAKPOINTS
+   9. RESPONSIVE BREAKPOINTS
    -------------------------------------------------------------------------- */
 @media (max-width: 960px) {
   .checkout-grid {
@@ -827,16 +810,11 @@
     order: -1;
   }
 
-  .payment-portal-tabs {
+  .confirm-ids-card {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .upi-gateway-box {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .express-btn-row {
+  .confirm-logistics-grid {
     grid-template-columns: 1fr;
   }
 
