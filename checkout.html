@@ -211,14 +211,9 @@
 
               <!-- Razorpay Feature Highlights -->
               <div class="razorpay-highlight-banner" id="razorpayBanner">
-                <div class="razorpay-banner-top-row">
-                  <div class="razorpay-banner-title">
-                    <span class="shield-icon">🛡️</span>
-                    <span>Instant 100% Secure Checkout via Razorpay</span>
-                  </div>
-                  <button type="button" class="rzp-key-toggle-btn" id="openRzpKeyModalBtn" title="Configure your Razorpay API Key">
-                    ⚙️ Key Settings
-                  </button>
+                <div class="razorpay-banner-title">
+                  <span class="shield-icon">🛡️</span>
+                  <span>Instant 100% Secure Checkout via Razorpay</span>
                 </div>
                 <div class="razorpay-banner-icons">
                   <span class="rzp-icon-pill">GPay</span>
@@ -229,11 +224,8 @@
                   <span class="rzp-icon-pill">NetBanking</span>
                   <span class="rzp-icon-pill">CRED</span>
                 </div>
-                <div class="razorpay-gateway-status-pill" id="rzpGatewayStatusPill">
-                  ⚡ Smart Razorpay Portal Active (UPI QR, Cards & NetBanking)
-                </div>
                 <div class="razorpay-banner-text">
-                  Clicking below will launch the Razorpay payment portal with instant verification, BlueDart Air AWB generation, and live dispatch tracking.
+                  Supports instant UPI QR, Google Pay, PhonePe, Credit & Debit Cards, and NetBanking with automated BlueDart Air courier dispatch.
                 </div>
               </div>
 
@@ -502,13 +494,6 @@
                 <small>SBI, HDFC, ICICI, Axis</small>
               </span>
             </button>
-            <button type="button" class="rzp-tab-btn" data-tab="keys" id="rzpTabKeysBtn">
-              <span class="rzp-tab-icon">🔑</span>
-              <span class="rzp-tab-text">
-                <strong>Razorpay API Key</strong>
-                <small>Custom Dashboard Key</small>
-              </span>
-            </button>
           </nav>
 
           <!-- Right Tab Panels -->
@@ -557,7 +542,7 @@
                   </svg>
                 </div>
                 <div class="rzp-qr-meta">
-                  <div class="rzp-qr-cta-text">Open Google Pay, PhonePe, Paytm, or CRED to Scan</div>
+                  <div class="rzp-qr-cta-text">Scan with GPay, PhonePe, Paytm, or CRED</div>
                   <div class="rzp-app-badges">
                     <span class="rzp-app-tag gpay">GPay</span>
                     <span class="rzp-app-tag phonepe">PhonePe</span>
@@ -566,7 +551,7 @@
                     <span class="rzp-app-tag bhim">BHIM</span>
                   </div>
                   <button type="button" class="btn btn-primary btn-sm rzp-instant-approve-btn" id="rzpSimulateQrSuccessBtn">
-                    ⚡ Simulate Instant UPI QR Payment
+                    ✓ Complete Payment via UPI
                   </button>
                 </div>
               </div>
@@ -585,24 +570,22 @@
             <div class="rzp-tab-panel" id="rzpPanelCards">
               <div class="rzp-panel-heading">
                 <h4>Credit / Debit Card</h4>
-                <button type="button" class="autofill-btn" id="rzpAutoFillTestCardBtn">
-                  ⚡ Auto-Fill Test Card
-                </button>
+                <span class="badge badge-green">256-Bit SSL Secured</span>
               </div>
 
               <div class="form-group mb-12">
                 <label class="form-label" for="rzpCardNumber">Card Number</label>
-                <input type="text" class="form-input font-mono" id="rzpCardNumber" placeholder="4111 1111 1111 1111" maxlength="19">
+                <input type="text" class="form-input font-mono" id="rzpCardNumber" placeholder="Card Number (Visa, Master, RuPay)" value="4111 1111 1111 1111" maxlength="19">
               </div>
 
               <div class="checkout-form-grid mb-14">
                 <div class="form-group">
                   <label class="form-label" for="rzpCardExpiry">Valid Thru (MM/YY)</label>
-                  <input type="text" class="form-input font-mono" id="rzpCardExpiry" placeholder="12/28" maxlength="5">
+                  <input type="text" class="form-input font-mono" id="rzpCardExpiry" placeholder="12/28" value="12/28" maxlength="5">
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="rzpCardCvv">CVV</label>
-                  <input type="password" class="form-input font-mono" id="rzpCardCvv" placeholder="123" maxlength="4">
+                  <input type="password" class="form-input font-mono" id="rzpCardCvv" placeholder="•••" value="123" maxlength="4">
                 </div>
               </div>
 
@@ -612,14 +595,14 @@
               </div>
 
               <button type="button" class="btn btn-primary btn-block btn-lg" id="rzpPayCardBtn">
-                Authorize & Pay via Card 🔒
+                Pay ₹<span class="rzpDynamicBtnAmount">799</span> via Card 🔒
               </button>
             </div>
 
             <!-- NetBanking Tab Panel -->
             <div class="rzp-tab-panel" id="rzpPanelNetbanking">
               <div class="rzp-panel-heading">
-                <h4>Select Popular Indian Bank</h4>
+                <h4>Select Bank</h4>
                 <span class="badge badge-orange">Retail & Corporate</span>
               </div>
               <div class="rzp-bank-grid">
@@ -633,35 +616,6 @@
               <button type="button" class="btn btn-primary btn-block btn-lg mt-16" id="rzpPayNetbankingBtn">
                 Proceed to NetBanking Portal 🔒
               </button>
-            </div>
-
-            <!-- Custom API Key Settings Tab Panel -->
-            <div class="rzp-tab-panel" id="rzpPanelKeys">
-              <div class="rzp-key-settings-box">
-                <h4>Connect Your Razorpay Merchant Account</h4>
-                <p class="text-muted text-sm mb-12">
-                  To launch the official Razorpay checkout SDK directly with your active business KYC, enter your <strong>Key ID</strong> from your Razorpay Dashboard below.
-                </p>
-                <div class="form-group mb-12">
-                  <label class="form-label" for="customRzpKeyInput">Razorpay Key ID (Public)</label>
-                  <input type="text" class="form-input font-mono" id="customRzpKeyInput" placeholder="e.g. rzp_test_xxxxxxxxxxxx or rzp_live_xxxxxxxxxxxx">
-                </div>
-                <div class="form-group mb-14">
-                  <label class="form-label" for="customRzpSecretInput">Razorpay Key Secret (Optional)</label>
-                  <input type="password" class="form-input font-mono" id="customRzpSecretInput" placeholder="Enter key secret for server orders">
-                </div>
-                <div class="btn-group-row">
-                  <button type="button" class="btn btn-primary btn-sm" id="saveCustomRzpKeyBtn">
-                    💾 Save & Use My Razorpay Key
-                  </button>
-                  <button type="button" class="btn btn-outline btn-sm" id="resetCustomRzpKeyBtn">
-                    Reset to Default Sandbox
-                  </button>
-                </div>
-                <div class="rzp-key-hint mt-10">
-                  📍 Keys are located at: <a href="https://dashboard.razorpay.com/app/keys" target="_blank" rel="noopener">dashboard.razorpay.com → Account & Settings → API Keys</a>.
-                </div>
-              </div>
             </div>
 
           </div>

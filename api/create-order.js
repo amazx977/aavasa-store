@@ -1,9 +1,18 @@
 /**
+ * ============================================================================
+ * BACKEND CONFIGURATION: RAZORPAY MERCHANT CREDENTIALS
+ * You can set these directly below, or via Vercel Environment Variables:
+ * RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET
+ * ============================================================================
+ */
+const BACKEND_RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || '';
+const BACKEND_RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
+
+/**
  * Vercel Serverless Function: Create Razorpay Order
  * Securely creates a server-side order with Razorpay API (POST https://api.razorpay.com/v1/orders)
  * Uses native fetch (Node 18+). Zero external npm dependencies.
  */
-
 export default async function handler(req, res) {
   // CORS Configuration
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -16,6 +25,16 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
+  }
+
+  // Allow GET request to check gateway health/status
+  if (req.method === 'GET') {
+    const isConfigured = Boolean(BACKEND_RAZORPAY_KEY_ID && BACKEND_RAZORPAY_KEY_SECRET);
+    return res.status(200).json({
+      status: 'active',
+      configured: isConfigured,
+      keyId: isConfigured ? BACKEND_RAZORPAY_KEY_ID : null
+    });
   }
 
   if (req.method !== 'POST') {
@@ -38,15 +57,15 @@ export default async function handler(req, res) {
     const receipt = body.receipt || `rcpt_${Date.now()}`;
     const notes = body.notes || {};
 
-    // Keys can be provided via environment variables OR client header/body
-    const keyId = process.env.RAZORPAY_KEY_ID || req.headers['x-razorpay-key-id'] || body.keyId;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET || req.headers['x-razorpay-key-secret'] || body.keySecret;
+    // Keys resolved from backend config, environment variables, or secure admin headers
+    const keyId = BACKEND_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || req.headers['x-razorpay-key-id'] || body.keyId;
+    const keySecret = BACKEND_RAZORPAY_KEY_SECRET || process.env.RAZORPAY_KEY_SECRET || req.headers['x-razorpay-key-secret'] || body.keySecret;
 
     if (!keyId || !keySecret) {
       return res.status(200).json({
         success: false,
         requiresConfiguration: true,
-        message: 'No Razorpay Key ID or Secret configured. Use client-side sandbox or configure keys in Admin Portal.'
+        message: 'No Razorpay Key ID or Secret configured in backend.'
       });
     }
 
@@ -63,7 +82,7 @@ export default async function handler(req, res) {
         'Authorization': authHeader
       },
       body: JSON.stringify({
-        amount: Math.round(amount * 100), // convert to paise
+        amount: Math.round(amount * 100), // paise
         currency,
         receipt,
         notes

@@ -825,45 +825,8 @@
 }
 
 /* --------------------------------------------------------------------------
-   10. RAZORPAY SMART INTERACTIVE MODAL & KEY MANAGER
+   10. RAZORPAY NATIVE LUXURY PAYMENT MODAL
    -------------------------------------------------------------------------- */
-.razorpay-banner-top-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.rzp-key-toggle-btn {
-  background-color: rgba(12, 35, 64, 0.08);
-  border: 1px solid rgba(12, 35, 64, 0.15);
-  color: #0c2340;
-  border-radius: var(--radius-pill);
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.rzp-key-toggle-btn:hover {
-  background-color: #0c2340;
-  color: #fff;
-}
-
-.razorpay-gateway-status-pill {
-  display: inline-block;
-  background-color: rgba(45, 74, 62, 0.12);
-  border: 1px solid rgba(45, 74, 62, 0.25);
-  color: var(--c-green-700);
-  font-size: 0.76rem;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-  margin-bottom: 10px;
-}
-
 /* Modal Overlay */
 .rzp-smart-modal-overlay {
   position: fixed;
@@ -1176,24 +1139,6 @@
   border-color: #0284c7;
   background-color: #e0f2fe;
   color: #0369a1;
-}
-
-/* Custom Keys Tab Box */
-.rzp-key-settings-box {
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 16px;
-}
-
-.rzp-key-hint {
-  font-size: 0.74rem;
-  color: #64748b;
-}
-
-.rzp-key-hint a {
-  color: #0284c7;
-  text-decoration: underline;
 }
 
 /* Processing Overlay */
