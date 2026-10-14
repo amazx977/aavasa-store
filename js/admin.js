@@ -898,6 +898,101 @@ const Admin = (function () {
       });
     }
 
+    // Shopify OAuth callback check & status update
+    const shopifyBadge = document.getElementById('adminShopifyStatusBadge');
+    const testShopifySyncBtn = document.getElementById('adminTestShopifySyncBtn');
+
+    function updateShopifyAdminBadge() {
+      const token = localStorage.getItem('aavasa_shopify_token');
+      if (shopifyBadge) {
+        if (token) {
+          shopifyBadge.textContent = '🟢 Connected & Syncing Orders';
+          shopifyBadge.className = 'badge badge-green';
+        } else {
+          shopifyBadge.textContent = 'Ready to Connect';
+          shopifyBadge.className = 'badge badge-orange';
+        }
+      }
+    }
+    updateShopifyAdminBadge();
+
+    // Check if redirected from Shopify OAuth (?code=...&shop=...)
+    const urlParams = new URLSearchParams(window.location.search);
+    const shopifyCode = urlParams.get('code');
+    const shopifyShopParam = urlParams.get('shop');
+
+    if (shopifyCode) {
+      Cart.showToast('Exchanging authorization code with Shopify...', 'green');
+      fetch('/api/shopify?action=exchange-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: shopifyCode, shop: shopifyShopParam || 'uncvcs-tv.myshopify.com' })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.accessToken) {
+          localStorage.setItem('aavasa_shopify_token', data.accessToken);
+          updateShopifyAdminBadge();
+          Cart.showToast('🎉 Shopify store uncvcs-tv.myshopify.com successfully connected!', 'green');
+          window.history.replaceState({}, '', window.location.pathname);
+        } else {
+          Cart.showToast('Shopify authorization response: ' + (data.error?.message || 'Check credentials'));
+        }
+      })
+      .catch(err => {
+        console.warn('OAuth exchange error:', err);
+      });
+    }
+
+    if (testShopifySyncBtn) {
+      testShopifySyncBtn.addEventListener('click', () => {
+        const token = localStorage.getItem('aavasa_shopify_token') || '';
+        const sampleOrder = {
+          orderId: 'PRE-2026-TEST-' + Math.floor(100 + Math.random() * 900),
+          customer: {
+            name: 'Priya Sharma (Sample)',
+            email: 'priya.test@aavasa.com',
+            phone: '+91 98201 44521',
+            address: '42 Marine Drive',
+            city: 'Mumbai',
+            state: 'Maharashtra',
+            pin: '400020'
+          },
+          items: [
+            { name: 'Adore Eau De Parfum 100ml', price: 799, qty: 1 }
+          ],
+          total: 799,
+          paymentMethod: 'RAZORPAY (ONLINE)',
+          paymentId: 'pay_test_' + Math.random().toString(36).substring(2, 10),
+          awb: 'BD-77889900'
+        };
+
+        Cart.showToast('Sending test pre-order to Shopify...', 'green');
+        fetch('/api/shopify?action=sync-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-shopify-token': token
+          },
+          body: JSON.stringify({ order: sampleOrder })
+        })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            Cart.showToast(`✓ Order #${res.shopifyOrderNumber || res.shopifyOrderId} created in Shopify!`, 'green');
+            if (res.shopifyAdminUrl) {
+              window.open(res.shopifyAdminUrl, '_blank');
+            }
+          } else {
+            Cart.showToast('Shopify note: ' + (res.message || res.error || 'Token needed. Click 1-Click Authorize above.'));
+          }
+        })
+        .catch(e => {
+          Cart.showToast('Sync request error: ' + e.message);
+        });
+      });
+    }
+
     // Table Row Action Buttons (Delegated)
     const tableBody = document.getElementById('adminOrdersTableBody');
     if (tableBody) {

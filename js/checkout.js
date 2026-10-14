@@ -510,6 +510,25 @@ const Checkout = (function () {
     // Clear cart contents after successful pre-order
     Cart.clearCart();
 
+    // Asynchronously push order to Shopify Admin (uncvcs-tv.myshopify.com)
+    try {
+      const shopifyToken = localStorage.getItem('aavasa_shopify_token') || '';
+      fetch('/api/shopify?action=sync-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-shopify-token': shopifyToken
+        },
+        body: JSON.stringify({ order: newOrder })
+      }).then(r => r.json()).then(res => {
+        if (res.success) {
+          console.log('Pre-Order successfully synced to Shopify uncvcs-tv.myshopify.com:', res);
+        }
+      }).catch(err => console.warn('Shopify sync notice:', err));
+    } catch (e) {
+      // non-blocking
+    }
+
     // Render the Confirmation & Tracking Screen
     renderConfirmationTrackingScreen(newOrder);
 
