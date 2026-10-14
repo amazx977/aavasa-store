@@ -11,7 +11,7 @@ const Checkout = (function () {
   // RAZORPAY API KEY CONFIGURATION
   // Official Razorpay Standard Key ID:
   // =========================================================================
-  const CONFIG_RAZORPAY_KEY = 'rzp_test_TnpHm6W02JydRs';
+  const CONFIG_RAZORPAY_KEY = 'rzp_live_Tnq1aTNzuxqpok';
 
   function getRazorpayKey() {
     return CONFIG_RAZORPAY_KEY || (localStorage.getItem('aavasa_razorpay_key_id') || '').trim();

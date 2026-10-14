@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_TnpHm6W02JydRs';
+  const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_live_Tnq1aTNzuxqpok';
   const keySecret = process.env.RAZORPAY_KEY_SECRET || '';
 
   // Allow GET request to check gateway health/status
