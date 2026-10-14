@@ -1,53 +1,32 @@
 /**
  * AAVASA / The Bold Rose Luxury Perfumes
- * Professional Razorpay Payment Gateway & Checkout Engine
- * - Clean customer-facing interface with zero developer/API key options.
- * - Automatic backend order generation via /api/create-order when keys are configured.
- * - Native luxury payment portal with UPI QR, Cards, and NetBanking.
- * - Customer Order Confirmation Status & Real-Time BlueDart Air Tracking.
+ * Simple Official Razorpay Standard Checkout & Order Fulfillment
+ * Direct Razorpay SDK integration (Razorpay.open()) with automated BlueDart tracking & Shopify sync.
  */
 
 const Checkout = (function () {
   let activeOrder = null;
   let selectedPaymentChannel = 'razorpay'; // 'razorpay' or 'cod'
   let selectedShippingMethod = 'standard'; // 'standard' (Free) or 'priority' (99)
-  let pendingAddress = null;
-  let pendingFinalTotal = 0;
-  let selectedBankChoice = 'HDFC';
-  let backendKeyConfig = null;
+
+  // =========================================================================
+  // RAZORPAY API KEY CONFIGURATION
+  // Paste your Razorpay Key ID directly below:
+  // =========================================================================
+  const CONFIG_RAZORPAY_KEY = ''; // <-- Paste your Razorpay Key ID (e.g. 'rzp_test_xxxx' or 'rzp_live_xxxx')
+
+  function getRazorpayKey() {
+    return CONFIG_RAZORPAY_KEY || (localStorage.getItem('aavasa_razorpay_key_id') || '').trim();
+  }
 
   function isPageCheckout() {
     return !!document.getElementById('checkoutPageRoot');
   }
 
   /* --------------------------------------------------------------------------
-     1. BACKEND GATEWAY CHECK
-     -------------------------------------------------------------------------- */
-  async function checkBackendGateway() {
-    try {
-      const res = await fetch('/api/create-order');
-      if (res.ok) {
-        backendKeyConfig = await res.json();
-      }
-    } catch (e) {
-      // Backend check silent fallback
-    }
-  }
-
-  function getMerchantKey() {
-    // Priority: Backend API config -> Admin Portal stored key
-    if (backendKeyConfig && backendKeyConfig.configured && backendKeyConfig.keyId) {
-      return backendKeyConfig.keyId;
-    }
-    return (localStorage.getItem('aavasa_razorpay_key_id') || '').trim();
-  }
-
-  /* --------------------------------------------------------------------------
-     2. INITIALIZATION & ORDER SUMMARY RENDERING
+     1. INITIALIZATION & ORDER SUMMARY RENDERING
      -------------------------------------------------------------------------- */
   function initPageCheckout() {
-    checkBackendGateway();
-
     const totals = Cart.getTotals();
     const emptyState = document.getElementById('checkoutEmptyState');
     const activeGrid = document.getElementById('checkoutActiveGrid');
@@ -143,7 +122,7 @@ const Checkout = (function () {
   }
 
   /* --------------------------------------------------------------------------
-     3. FORM VALIDATION & AUTO-FILL HELPERS
+     2. FORM VALIDATION & AUTO-FILL HELPERS
      -------------------------------------------------------------------------- */
   function autoFillSampleAddress() {
     const nameInput = document.getElementById('pageCustName');
@@ -186,7 +165,7 @@ const Checkout = (function () {
   }
 
   /* --------------------------------------------------------------------------
-     4. PAYMENT EXECUTION & GATEWAY ORCHESTRATION
+     3. SIMPLE OFFICIAL RAZORPAY PORTAL EXECUTION
      -------------------------------------------------------------------------- */
   function executePreOrderPayment() {
     const address = validateAddressForm();
@@ -209,52 +188,24 @@ const Checkout = (function () {
       return;
     }
 
-    pendingAddress = address;
-    pendingFinalTotal = finalTotal;
-
-    const merchantKey = getMerchantKey();
-
-    // Option B: If merchant configured Razorpay Key in backend, try official SDK
-    if (merchantKey && typeof Razorpay !== 'undefined') {
-      launchOfficialRazorpaySDK(address, finalTotal, merchantKey);
-    } else {
-      // Option C: Professional Native Razorpay Gateway Portal (UPI QR, Cards, NetBanking)
-      openRzpSmartModal(address, finalTotal);
+    // Option B: Official Razorpay Standard Checkout
+    const key = getRazorpayKey();
+    if (!key) {
+      Cart.showToast('Please provide your Razorpay Key ID to enable payment.');
+      return;
     }
-  }
 
-  async function launchOfficialRazorpaySDK(address, finalTotal, keyId) {
-    const totals = Cart.getTotals();
-    let orderId = null;
-
-    try {
-      const resp = await fetch('/api/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: finalTotal,
-          currency: 'INR',
-          notes: {
-            customer_name: address.name,
-            customer_email: address.email,
-            customer_phone: address.phone
-          }
-        })
-      });
-      const data = await resp.json();
-      if (data.success && data.order && data.order.id) {
-        orderId = data.order.id;
-      }
-    } catch (e) {
-      console.warn('Backend order creation, proceeding client-side:', e);
+    if (typeof Razorpay === 'undefined') {
+      Cart.showToast('Connecting to Razorpay...');
+      return;
     }
 
     const options = {
-      key: keyId,
-      amount: Math.round(finalTotal * 100), // paise
+      key: key,
+      amount: Math.round(finalTotal * 100), // amount in paise
       currency: 'INR',
       name: 'AAVASA Perfumes',
-      description: `Batch 01 Pre-Order Reservation (${totals.items.length} items)`,
+      description: `Batch 01 Pre-Order Reservation (${totals.items.length} item${totals.items.length > 1 ? 's' : ''})`,
       image: 'media/Adore.png',
       prefill: {
         name: address.name,
@@ -266,9 +217,10 @@ const Checkout = (function () {
         batch: selectedShippingMethod === 'priority' ? 'VIP Batch Express' : 'Batch 01 Priority Release'
       },
       theme: {
-        color: '#C85A17'
+        color: '#c86432' // Burnt Orange Palette
       },
       handler: function (response) {
+        // Razorpay payment successfully authorized!
         const paymentId = response.razorpay_payment_id || ('pay_' + Math.random().toString(36).substring(2, 14));
         finalizePreOrder(address, paymentId, 'RAZORPAY (ONLINE)');
       },
@@ -279,119 +231,21 @@ const Checkout = (function () {
       }
     };
 
-    if (orderId) {
-      options.order_id = orderId;
-    }
-
     try {
       const rzp = new Razorpay(options);
       rzp.on('payment.failed', function (resp) {
-        // Fall back gracefully to native portal if key has issues
-        openRzpSmartModal(address, finalTotal);
+        const errDesc = resp.error ? resp.error.description : 'Payment failed';
+        Cart.showToast(`Razorpay transaction note: ${errDesc}`);
       });
       rzp.open();
     } catch (err) {
-      openRzpSmartModal(address, finalTotal);
+      console.error('Error opening Razorpay checkout:', err);
+      Cart.showToast('Could not open Razorpay checkout. Please verify Key ID.');
     }
   }
 
   /* --------------------------------------------------------------------------
-     5. PROFESSIONAL NATIVE PAYMENT PORTAL (ZERO DEV LEAKS)
-     -------------------------------------------------------------------------- */
-  function openRzpSmartModal(address, amount) {
-    pendingAddress = address || validateAddressForm();
-    pendingFinalTotal = amount || (Cart.getTotals().subtotal);
-
-    const modal = document.getElementById('rzpSmartModal');
-    if (!modal) return;
-
-    const amountDisp = document.getElementById('rzpModalAmountDisplay');
-    if (amountDisp) amountDisp.textContent = `₹${pendingFinalTotal.toLocaleString('en-IN')}`;
-
-    document.querySelectorAll('.rzpDynamicBtnAmount').forEach(el => {
-      el.textContent = pendingFinalTotal.toLocaleString('en-IN');
-    });
-
-    switchRzpModalTab('upi');
-    modal.classList.remove('d-none');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeRzpSmartModal() {
-    const modal = document.getElementById('rzpSmartModal');
-    if (modal) modal.classList.add('d-none');
-    document.body.style.overflow = '';
-  }
-
-  function switchRzpModalTab(tabKey) {
-    document.querySelectorAll('.rzp-tab-btn').forEach(btn => {
-      if (btn.dataset.tab === tabKey) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
-    const panelMap = {
-      upi: 'rzpPanelUpi',
-      cards: 'rzpPanelCards',
-      netbanking: 'rzpPanelNetbanking'
-    };
-
-    Object.keys(panelMap).forEach(k => {
-      const p = document.getElementById(panelMap[k]);
-      if (p) {
-        if (k === tabKey) {
-          p.classList.add('active');
-        } else {
-          p.classList.remove('active');
-        }
-      }
-    });
-  }
-
-  function simulateGatewaySuccess(channelTitle) {
-    if (!pendingAddress) {
-      pendingAddress = validateAddressForm() || {
-        name: 'Priya Sharma',
-        email: 'priya.sharma@gmail.com',
-        phone: '9820144521',
-        address: 'B-402, Sea Green Heights, Worli',
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        pin: '400018'
-      };
-    }
-
-    const overlay = document.getElementById('rzpProcessingOverlay');
-    const titleEl = document.getElementById('rzpProcessingTitle');
-    const subEl = document.getElementById('rzpProcessingSub');
-
-    if (overlay) {
-      overlay.classList.remove('d-none');
-      if (titleEl) titleEl.textContent = 'Securing Connection with Bank...';
-      if (subEl) subEl.textContent = `Authorizing ₹${pendingFinalTotal.toLocaleString('en-IN')} via ${channelTitle}`;
-
-      setTimeout(() => {
-        if (titleEl) titleEl.textContent = 'Payment Authorized Successfully! ✓';
-        if (subEl) subEl.textContent = 'Generating BlueDart Air AWB & Finalizing Pre-Order...';
-
-        setTimeout(() => {
-          overlay.classList.add('d-none');
-          closeRzpSmartModal();
-          const simPaymentId = 'pay_' + Math.random().toString(36).substring(2, 14).toUpperCase();
-          finalizePreOrder(pendingAddress, simPaymentId, channelTitle);
-        }, 600);
-      }, 900);
-    } else {
-      closeRzpSmartModal();
-      const simPaymentId = 'pay_' + Math.random().toString(36).substring(2, 14).toUpperCase();
-      finalizePreOrder(pendingAddress, simPaymentId, channelTitle);
-    }
-  }
-
-  /* --------------------------------------------------------------------------
-     6. ORDER FINALIZATION, PERSISTENCE & TRACKING SCREEN
+     4. ORDER FINALIZATION, PERSISTENCE & TRACKING SCREEN
      -------------------------------------------------------------------------- */
   function finalizePreOrder(address, paymentId, paymentMethodTitle) {
     const totals = Cart.getTotals();
@@ -481,9 +335,9 @@ const Checkout = (function () {
       checkpoints: [
         {
           time: 'Just now',
-          status: 'Payment Authorized',
-          location: 'AAVASA Secure Payments Gateway',
-          notes: `Authorized under Transaction ${paymentId}. Pre-order allocated to Kannauj Distillation Laboratory.`
+          status: 'Razorpay Payment Authorized',
+          location: 'Razorpay Payments Network',
+          notes: `Transaction ${paymentId} cleared. Pre-order scheduled for Batch 01 fulfillment.`
         },
         {
           time: '5 mins ago',
@@ -496,7 +350,7 @@ const Checkout = (function () {
 
     activeOrder = newOrder;
 
-    // Sync order to localStorage for Tracker and Admin Portal
+    // Persist order for Tracking and Admin Hub
     try {
       const stored = localStorage.getItem('aavasa_tracked_orders');
       let orders = stored ? JSON.parse(stored) : [];
@@ -507,10 +361,10 @@ const Checkout = (function () {
       console.warn('Could not persist to localStorage:', e);
     }
 
-    // Clear cart contents after successful pre-order
+    // Clear cart after checkout
     Cart.clearCart();
 
-    // Asynchronously push order to Shopify Admin (uncvcs-tv.myshopify.com)
+    // Push order to Shopify Admin (uncvcs-tv.myshopify.com)
     try {
       const shopifyToken = localStorage.getItem('aavasa_shopify_token') || '';
       fetch('/api/shopify?action=sync-order', {
@@ -522,17 +376,17 @@ const Checkout = (function () {
         body: JSON.stringify({ order: newOrder })
       }).then(r => r.json()).then(res => {
         if (res.success) {
-          console.log('Pre-Order successfully synced to Shopify uncvcs-tv.myshopify.com:', res);
+          console.log('Order synced to Shopify:', res);
         }
       }).catch(err => console.warn('Shopify sync notice:', err));
     } catch (e) {
       // non-blocking
     }
 
-    // Render the Confirmation & Tracking Screen
+    // Render Confirmation & Tracking Screen
     renderConfirmationTrackingScreen(newOrder);
 
-    // Scroll smoothly to top of confirmation
+    // Scroll smoothly to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     Cart.showToast(`🎉 Pre-Order ${newOrder.orderId} Confirmed with BlueDart Air Tracking!`, 'green');
@@ -547,12 +401,14 @@ const Checkout = (function () {
     if (confirmSec) confirmSec.classList.remove('d-none');
     if (summaryCard) summaryCard.classList.add('d-none');
 
-    // Populate Key Identifiers
-    const orderNumEl = document.getElementById('confirmOrderNumberDisplay');
+    // Populate Identifiers
+    const orderNumEl = document.getElementById('confirmOrderIdDisplay');
     const paymentIdEl = document.getElementById('confirmPaymentIdDisplay');
     const courierEl = document.getElementById('confirmCourierDisplay');
     const awbEl = document.getElementById('confirmAwbDisplay');
     const etaEl = document.getElementById('confirmEtaDisplay');
+    const payBadge = document.getElementById('confirmPaymentBadge');
+    const subtitleEl = document.getElementById('confirmSubtitleText');
 
     if (orderNumEl) orderNumEl.textContent = order.orderId;
     if (paymentIdEl) paymentIdEl.textContent = order.paymentId;
@@ -560,38 +416,71 @@ const Checkout = (function () {
     if (awbEl) awbEl.textContent = order.awb;
     if (etaEl) etaEl.textContent = order.eta;
 
-    // Populate Delivery Destination
-    const destName = document.getElementById('confirmDestName');
-    const destPhone = document.getElementById('confirmDestPhone');
-    const destEmail = document.getElementById('confirmDestEmail');
-    const destAddr = document.getElementById('confirmDestAddress');
+    if (payBadge) {
+      if (order.paymentMethod && order.paymentMethod.includes('COD')) {
+        payBadge.textContent = 'Cash on Delivery';
+        payBadge.className = 'badge badge-orange';
+      } else {
+        payBadge.textContent = 'Paid via Razorpay';
+        payBadge.className = 'badge badge-green';
+      }
+    }
 
-    if (destName) destName.textContent = order.customer.name;
-    if (destPhone) destPhone.textContent = order.customer.phone;
-    if (destEmail) destEmail.textContent = order.customer.email;
-    if (destAddr) destAddr.textContent = `${order.customer.address}, ${order.customer.city}, ${order.customer.state} - ${order.customer.pin}`;
+    if (subtitleEl) {
+      subtitleEl.textContent = `Your pre-order has been reserved. BlueDart Air Express tracking receipt sent to ${order.customer.email}.`;
+    }
+
+    // Update Stepper Progress
+    const stepperFill = document.getElementById('confirmStepperFill');
+    if (stepperFill) {
+      stepperFill.className = 'stepper-progress-fill stage-1';
+    }
+
+    // Populate Delivery Destination
+    const addrDisplay = document.getElementById('confirmAddressDisplay');
+    if (addrDisplay) {
+      addrDisplay.innerHTML = `
+        <div class="confirm-dest-name font-bold text-choco-900">${order.customer.name}</div>
+        <div class="confirm-dest-phone text-choco-600 mt-2">📞 +91 ${order.customer.phone} &bull; ✉️ ${order.customer.email}</div>
+        <div class="confirm-dest-address text-choco-700 mt-4">${order.customer.address}, ${order.customer.city}, ${order.customer.state} - ${order.customer.pin}</div>
+      `;
+    }
 
     // Populate Ordered Items
     const itemsListEl = document.getElementById('confirmItemsList');
     if (itemsListEl) {
-      itemsListEl.innerHTML = order.items.map(item => `
-        <div class="confirm-item-row">
-          <img src="${item.image}" alt="${item.name}" class="confirm-item-img">
-          <div class="confirm-item-meta">
-            <div class="confirm-item-name">${item.name}</div>
-            <div class="confirm-item-sub">${item.size} • Qty: ${item.qty}</div>
+      const itemsHtml = order.items.map(item => `
+        <div class="confirm-item-mini">
+          <div>
+            <strong>${item.name}</strong> (${item.size}) &times; ${item.qty}
           </div>
-          <div class="confirm-item-price">
-            ₹${(item.price * item.qty).toLocaleString('en-IN')}
-          </div>
+          <strong class="text-choco-900">₹${(item.price * item.qty).toLocaleString('en-IN')}</strong>
+        </div>
+      `).join('');
+
+      const totalHtml = `
+        <div class="confirm-item-mini pt-8 border-top font-bold text-choco-900">
+          <span>Total Paid / Payable (${order.shippingMethod === 'priority' ? 'VIP Air Express' : 'Free Batch 01 Cargo'}):</span>
+          <span class="text-orange-600">₹${order.total.toLocaleString('en-IN')}</span>
+        </div>
+      `;
+
+      itemsListEl.innerHTML = itemsHtml + totalHtml;
+    }
+
+    // Populate Live Checkpoints Log
+    const logsListEl = document.getElementById('confirmLogsList');
+    if (logsListEl) {
+      logsListEl.innerHTML = order.checkpoints.map((cp, idx) => `
+        <div class="confirm-log-item ${idx === 0 ? 'latest' : ''}">
+          <div class="confirm-log-status">${cp.status}</div>
+          <div class="confirm-log-meta">${cp.location} &bull; <span>${cp.time}</span></div>
+          <div class="confirm-log-notes text-choco-600 mt-2">${cp.notes}</div>
         </div>
       `).join('');
     }
 
-    const grandTotalEl = document.getElementById('confirmGrandTotal');
-    if (grandTotalEl) grandTotalEl.textContent = `₹${order.total.toLocaleString('en-IN')}`;
-
-    // Wire "Open Public Live Tracker" link with order query param
+    // Live Tracker button
     const trackPageBtn = document.getElementById('confirmTrackPageBtn');
     if (trackPageBtn) {
       trackPageBtn.href = `track.html?id=${encodeURIComponent(order.orderId)}`;
@@ -599,7 +488,7 @@ const Checkout = (function () {
   }
 
   /* --------------------------------------------------------------------------
-     7. EVENT LISTENERS SETUP
+     5. EVENT LISTENERS SETUP
      -------------------------------------------------------------------------- */
   document.addEventListener('DOMContentLoaded', () => {
     if (isPageCheckout()) {
@@ -703,69 +592,12 @@ const Checkout = (function () {
           }
         });
       }
-
-      /* --- Smart Razorpay Modal Event Wiring --- */
-      const rzpCloseBtn = document.getElementById('rzpModalCloseBtn');
-      if (rzpCloseBtn) {
-        rzpCloseBtn.addEventListener('click', closeRzpSmartModal);
-      }
-
-      // Modal Tab buttons
-      document.querySelectorAll('.rzp-tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          switchRzpModalTab(btn.dataset.tab);
-        });
-      });
-
-      // Bank choice buttons in NetBanking
-      document.querySelectorAll('.rzp-bank-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.rzp-bank-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          selectedBankChoice = btn.dataset.bank || 'HDFC';
-        });
-      });
-
-      // 1. UPI Payment confirmation
-      const qrApproveBtn = document.getElementById('rzpSimulateQrSuccessBtn');
-      if (qrApproveBtn) {
-        qrApproveBtn.addEventListener('click', () => {
-          simulateGatewaySuccess('RAZORPAY UPI (QR CODE)');
-        });
-      }
-
-      // 2. Pay UPI ID button
-      const payUpiIdBtn = document.getElementById('rzpPayUpiIdBtn');
-      if (payUpiIdBtn) {
-        payUpiIdBtn.addEventListener('click', () => {
-          const vpa = document.getElementById('rzpUpiIdInput')?.value.trim() || 'customer@okhdfcbank';
-          simulateGatewaySuccess(`RAZORPAY UPI (${vpa})`);
-        });
-      }
-
-      // 3. Pay via Card button
-      const payCardBtn = document.getElementById('rzpPayCardBtn');
-      if (payCardBtn) {
-        payCardBtn.addEventListener('click', () => {
-          simulateGatewaySuccess('RAZORPAY CARD (VISA/MASTER)');
-        });
-      }
-
-      // 4. Pay via NetBanking button
-      const payNbBtn = document.getElementById('rzpPayNetbankingBtn');
-      if (payNbBtn) {
-        payNbBtn.addEventListener('click', () => {
-          simulateGatewaySuccess(`RAZORPAY NETBANKING (${selectedBankChoice})`);
-        });
-      }
     }
   });
 
   return {
     initPageCheckout,
     autoFillSampleAddress,
-    executePreOrderPayment,
-    openRzpSmartModal,
-    closeRzpSmartModal
+    executePreOrderPayment
   };
 })();
