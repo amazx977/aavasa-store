@@ -1,0 +1,684 @@
+/**
+ * AAVASA / The Bold Rose Luxury Perfumes
+ * Dedicated Admin Portal Stylesheet
+ * Strict Palette: Chocolate Brown, Cream, Burnt Orange, Green
+ */
+
+/* -----------------------------------------------------------------------------
+   1. ADMIN LAYOUT & BODY
+   ----------------------------------------------------------------------------- */
+.admin-body {
+  background-color: var(--c-cream-100);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-header {
+  background-color: var(--c-choco-950);
+  border-bottom: 2px solid var(--c-orange-500);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 0;
+}
+
+.admin-header-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-brand-wrap .brand-logo-text {
+  color: var(--c-cream-50);
+}
+
+.admin-brand-wrap .brand-logo-sub {
+  color: var(--c-orange-400);
+}
+
+.admin-env-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: rgba(46, 111, 64, 0.25);
+  color: #72d98f;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 217, 143, 0.4);
+}
+
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-time-display {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  color: var(--c-cream-300);
+  background-color: var(--c-choco-900);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--c-choco-700);
+}
+
+.admin-main {
+  flex: 1;
+  padding: 30px 0 60px;
+}
+
+.admin-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* -----------------------------------------------------------------------------
+   2. BANNER & HEADER SECTION
+   ----------------------------------------------------------------------------- */
+.admin-banner {
+  background: linear-gradient(135deg, var(--c-choco-900) 0%, var(--c-choco-800) 100%);
+  color: var(--c-cream-50);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--c-choco-700);
+}
+
+.admin-banner-text h1 {
+  font-size: 1.65rem;
+  color: var(--c-cream-50);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.admin-banner-text p {
+  color: var(--c-cream-300);
+  font-size: 0.92rem;
+  max-width: 760px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.admin-banner-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   3. KPI METRIC CARDS GRID
+   ----------------------------------------------------------------------------- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.kpi-card {
+  background-color: var(--c-cream-50);
+  border: 1px solid var(--c-cream-300);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.kpi-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.kpi-icon.choco {
+  background-color: var(--c-choco-100);
+  color: var(--c-choco-800);
+}
+
+.kpi-icon.orange {
+  background-color: var(--c-orange-100);
+  color: var(--c-orange-700);
+}
+
+.kpi-icon.green {
+  background-color: var(--c-green-100);
+  color: var(--c-green-800);
+}
+
+.kpi-icon.cream {
+  background-color: var(--c-cream-200);
+  color: var(--c-choco-900);
+}
+
+.kpi-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-choco-500);
+  margin-bottom: 2px;
+}
+
+.kpi-value {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--c-choco-900);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.kpi-hint {
+  font-size: 0.76rem;
+}
+
+/* -----------------------------------------------------------------------------
+   4. TOOLBAR & CONTROLS
+   ----------------------------------------------------------------------------- */
+.admin-toolbar-card {
+  background-color: var(--c-cream-50);
+  border: 1px solid var(--c-cream-300);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.toolbar-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-search-wrap svg {
+  position: absolute;
+  left: 14px;
+  color: var(--c-choco-400);
+  pointer-events: none;
+}
+
+.admin-search-input {
+  width: 100%;
+  padding: 10px 38px 10px 42px;
+  border: 1px solid var(--c-cream-400);
+  border-radius: var(--radius-sm);
+  background-color: #fff;
+  font-size: 0.88rem;
+  color: var(--c-choco-900);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.admin-search-input:focus {
+  outline: none;
+  border-color: var(--c-orange-500);
+  box-shadow: 0 0 0 3px rgba(200, 90, 23, 0.12);
+}
+
+.admin-clear-search-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  color: var(--c-choco-400);
+  cursor: pointer;
+  display: none;
+}
+
+.admin-clear-search-btn.active {
+  display: block;
+}
+
+.toolbar-filters-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--c-choco-700);
+}
+
+.admin-select {
+  padding: 8px 12px;
+  border: 1px solid var(--c-cream-400);
+  border-radius: var(--radius-sm);
+  background-color: #fff;
+  color: var(--c-choco-800);
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.admin-select:focus {
+  outline: none;
+  border-color: var(--c-orange-500);
+}
+
+/* -----------------------------------------------------------------------------
+   5. ORDERS TABLE
+   ----------------------------------------------------------------------------- */
+.admin-table-card {
+  background-color: var(--c-cream-50);
+  border: 1px solid var(--c-cream-300);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.table-header-meta {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--c-cream-300);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.table-header-meta h3 {
+  font-size: 1.15rem;
+  margin: 0;
+  color: var(--c-choco-900);
+}
+
+.table-subtext {
+  font-size: 0.82rem;
+  color: var(--c-choco-500);
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.admin-table th {
+  background-color: var(--c-cream-200);
+  color: var(--c-choco-800);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--c-cream-300);
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--c-cream-200);
+  color: var(--c-choco-900);
+  vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+  background-color: rgba(245, 235, 225, 0.45);
+}
+
+.order-id-badge {
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  color: var(--c-orange-700);
+  background-color: var(--c-orange-50);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(200, 90, 23, 0.25);
+  display: inline-block;
+}
+
+.order-date-text {
+  font-size: 0.78rem;
+  color: var(--c-choco-500);
+  margin-top: 2px;
+}
+
+.customer-name {
+  font-weight: 700;
+  color: var(--c-choco-900);
+}
+
+.customer-meta {
+  font-size: 0.78rem;
+  color: var(--c-choco-500);
+}
+
+.items-preview-stack {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mini-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--c-cream-400);
+  background-color: #fff;
+}
+
+.items-summary-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.payment-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  margin-top: 3px;
+}
+
+.payment-tag.paid {
+  background-color: var(--c-green-100);
+  color: var(--c-green-800);
+  border: 1px solid rgba(46, 111, 64, 0.3);
+}
+
+.payment-tag.cod {
+  background-color: var(--c-orange-100);
+  color: var(--c-orange-800);
+  border: 1px solid rgba(200, 90, 23, 0.3);
+}
+
+.table-status-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.table-status-pill.confirmed {
+  background-color: var(--c-choco-100);
+  color: var(--c-choco-800);
+  border: 1px solid var(--c-choco-300);
+}
+
+.table-status-pill.in-transit,
+.table-status-pill.out-delivery {
+  background-color: var(--c-orange-100);
+  color: var(--c-orange-700);
+  border: 1px solid rgba(200, 90, 23, 0.3);
+}
+
+.table-status-pill.delivered {
+  background-color: var(--c-green-100);
+  color: var(--c-green-800);
+  border: 1px solid rgba(46, 111, 64, 0.3);
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.action-icon-btn {
+  background-color: #fff;
+  border: 1px solid var(--c-cream-400);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--c-choco-800);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.action-icon-btn:hover {
+  background-color: var(--c-cream-200);
+  border-color: var(--c-choco-600);
+}
+
+.action-icon-btn.primary {
+  background-color: var(--c-orange-500);
+  color: #fff;
+  border-color: var(--c-orange-600);
+}
+
+.action-icon-btn.primary:hover {
+  background-color: var(--c-orange-600);
+}
+
+.action-icon-btn.danger {
+  color: #c92a2a;
+  border-color: rgba(201, 42, 42, 0.3);
+}
+
+.action-icon-btn.danger:hover {
+  background-color: #ffe3e3;
+}
+
+.table-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  display: none;
+}
+
+.table-empty-state.active {
+  display: block;
+}
+
+/* -----------------------------------------------------------------------------
+   6. ADMIN MODALS
+   ----------------------------------------------------------------------------- */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(27, 15, 11, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+.admin-modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.admin-modal-card {
+  background-color: var(--c-cream-50);
+  border: 1px solid var(--c-cream-300);
+  border-radius: var(--radius-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.admin-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--c-cream-300);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--c-cream-100);
+}
+
+.admin-modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--c-choco-900);
+}
+
+.admin-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.admin-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--c-cream-300);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background-color: var(--c-cream-100);
+}
+
+.admin-readonly-id {
+  font-family: var(--font-mono, monospace);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--c-orange-700);
+  background-color: var(--c-cream-200);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--c-cream-400);
+}
+
+.admin-subbox {
+  background-color: var(--c-cream-200);
+  border: 1px solid var(--c-cream-400);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.admin-subbox-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--c-choco-900);
+  margin-bottom: 4px;
+}
+
+.admin-subbox-desc {
+  font-size: 0.78rem;
+  color: var(--c-choco-600);
+  margin-bottom: 12px;
+}
+
+/* PIN Lock Screen Card */
+.admin-pin-card {
+  background-color: var(--c-cream-50);
+  border: 1px solid var(--c-cream-300);
+  border-radius: var(--radius-lg);
+  max-width: 400px;
+  width: 100%;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-pin-icon {
+  font-size: 2.8rem;
+  margin-bottom: 14px;
+}
+
+.admin-pin-input {
+  font-size: 1.25rem;
+  letter-spacing: 0.25em;
+  padding: 12px;
+}
+
+.admin-pin-hint {
+  font-size: 0.78rem;
+  color: var(--c-choco-500);
+}
+
+/* -----------------------------------------------------------------------------
+   7. RESPONSIVE BREAKPOINTS
+   ----------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .admin-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-toolbar-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-filters-wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    justify-content: space-between;
+  }
+
+  .filter-group select {
+    flex: 1;
+  }
+}

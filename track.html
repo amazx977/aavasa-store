@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order | AAVASA Luxury Perfumes</title>
+  <meta name="description" content="Live parcel tracking for AAVASA 6+ Hour perfumes. Track your BlueDart and Delhivery shipment status in real time.">
+  <link rel="icon" type="image/png" href="media/Adore.png">
+
+  <!-- Core and Component Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/tracker.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container announcement-content">
+      <div class="announcement-items">
+        <span class="announcement-item">
+          ✨ <span class="announcement-highlight">Free Express Shipping</span> Across India
+        </span>
+        <span class="announcement-item">
+          🧪 6+ Hour Lab-Tested Longevity Guarantee
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-logo-text">AAVASA</span>
+        <span class="brand-logo-sub">Parfums • Longevity First</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html#fragrances" class="nav-link">Fragrances</a></li>
+          <li><a href="index.html#discovery" class="nav-link">Discovery Sets</a></li>
+          <li><a href="index.html#science" class="nav-link">Longevity Science</a></li>
+          <li><a href="index.html#quiz" class="nav-link">Scent Matcher</a></li>
+          <li><a href="track.html" class="nav-link active">Track Order</a></li>
+          <li><a href="admin.html" class="nav-link">Admin Portal ⚙️</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="action-btn cart-action-btn cart-trigger-btn" aria-label="View Shopping Bag">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-btn-label">Bag</span>
+          <span class="cart-counter">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tracker Hero -->
+  <section class="tracker-hero">
+    <div class="container">
+      <div class="section-tag tag-orange-tint mb-12">
+        Live Air Courier Tracking
+      </div>
+      <h1>Track Your Luxury Fragrance Parcel</h1>
+      <p>Enter your 10-digit mobile number or Order ID to inspect live temperature-controlled courier progress.</p>
+    </div>
+  </section>
+
+  <!-- Tracker Search & Result Area -->
+  <main class="tracker-search-section">
+    <div class="container">
+      <div class="tracker-search-box">
+        <form class="tracker-search-form" id="trackerSearchForm">
+          <input 
+            type="text" 
+            class="tracker-search-input" 
+            id="trackerSearchInput" 
+            placeholder="Enter Pre-Order # (e.g. PRE-2026-7842) or Phone Number"
+            required
+          >
+          <button type="submit" class="btn btn-primary search-submit-btn">
+            Track Parcel 🚀
+          </button>
+        </form>
+
+        <div class="tracker-demo-chips">
+          <span class="font-bold">Click to load sample pre-order:</span>
+          <button class="demo-chip-btn" data-orderid="PRE-2026-7842">#PRE-2026-7842 [Out for Delivery]</button>
+          <button class="demo-chip-btn" data-orderid="PRE-2026-5510">#PRE-2026-5510 [In Transit]</button>
+          <button class="demo-chip-btn" data-orderid="PRE-2026-3199">#PRE-2026-3199 [Delivered]</button>
+          <button class="demo-chip-btn" data-orderid="PRE-2026-9214">#PRE-2026-9214 [Pre-Order Lab]</button>
+        </div>
+      </div>
+
+      <!-- Tracking Result Card -->
+      <div class="tracking-result-area" id="trackingResultArea">
+        <div class="tracking-card">
+          <!-- Status Header -->
+          <div class="tracking-header">
+            <div class="tracking-order-meta">
+              <h3 id="trackOrderIdTitle">Order AAV-2026-7842</h3>
+              <div class="tracking-awb-line">
+                <span>Courier: <strong id="trackCourierName">BlueDart Air Express</strong></span>
+                <span>•</span>
+                <span>AWB: <strong id="trackAwbCode">BD-88492019</strong></span>
+                <button class="copy-awb-btn" id="copyAwbBtn" title="Copy tracking number">Copy AWB</button>
+              </div>
+            </div>
+            <div class="tracking-eta-box">
+              <div class="eta-label">Estimated Delivery</div>
+              <div class="eta-date" id="trackEtaDisplay">Today by 6:00 PM</div>
+              <div class="mt-6">
+                <span class="tracking-status-badge in-transit" id="trackStatusBadge">In Transit</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stepper Progress Bar -->
+          <div class="tracking-stepper-wrap">
+            <div class="stepper-track">
+              <div class="stepper-progress-fill" id="stepperProgressFill"></div>
+              
+              <div class="stepper-node completed" data-step="1">
+                <div class="node-icon-circle">✓</div>
+                <div class="node-title">Order Confirmed</div>
+                <div class="node-time">Payment Verified</div>
+              </div>
+
+              <div class="stepper-node completed" data-step="2">
+                <div class="node-icon-circle">✓</div>
+                <div class="node-title">Lab Batch Tested</div>
+                <div class="node-time">6+ Hr Check Passed</div>
+              </div>
+
+              <div class="stepper-node completed" data-step="3">
+                <div class="node-icon-circle">✓</div>
+                <div class="node-title">Velvet Packed</div>
+                <div class="node-time">Crushproof Box</div>
+              </div>
+
+              <div class="stepper-node active" data-step="4">
+                <div class="node-icon-circle">🚚</div>
+                <div class="node-title">Out for Delivery</div>
+                <div class="node-time">Courier Handover</div>
+              </div>
+
+              <div class="stepper-node" data-step="5">
+                <div class="node-icon-circle">🎁</div>
+                <div class="node-title">Delivered</div>
+                <div class="node-time">Package Handover</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two-Column Details -->
+          <div class="tracking-details-grid">
+            <!-- Transit Logs -->
+            <div class="timeline-logs">
+              <h4>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                Live Transit Checkpoints
+              </h4>
+              <div class="logs-list" id="trackingLogsList"></div>
+            </div>
+
+            <!-- Package Breakdown & Address -->
+            <div class="tracking-items-box">
+              <h4>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                Package Contents
+              </h4>
+              <div id="trackingPackageItems"></div>
+              <div class="tracking-address-box" id="trackingAddressBox"></div>
+            </div>
+          </div>
+
+          <!-- Actions Bar -->
+          <div class="tracking-actions-bar">
+            <div class="tracker-helper-text">
+              Need to reschedule delivery? Contact BlueDart VIP Desk at <strong>1800 209 1234</strong>
+            </div>
+            <div class="btn-group-row">
+              <button class="btn btn-outline btn-sm" id="openInvoiceBtn">
+                📄 View Tax Invoice
+              </button>
+              <a href="https://wa.me/919820012345?text=Hi%20AAVASA%20Support,%20I%20have%20a%20query%20about%20my%20order" target="_blank" class="btn btn-secondary btn-sm">
+                💬 WhatsApp Support
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>
+          © 2026 AAVASA Perfumes India. 6+ Hour Lab-Tested Longevity. #ClarityFirst
+        </div>
+        <div class="footer-bottom-links">
+          <a href="index.html#fragrances">Shop Perfumes</a>
+          <a href="index.html#science">The Science</a>
+          <a href="track.html">Track Order</a>
+          <a href="admin.html">Admin Portal ⚙️</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-Out Cart Drawer -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Bag">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span>Your Pre-Order Bag</span>
+      </div>
+      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Close Bag">✕</button>
+    </div>
+
+    <div class="cart-goal-bar">
+      <div class="goal-text" id="cartGoalText">
+        Add <strong>₹999</strong> for <strong>Free Express Delivery</strong>
+      </div>
+      <div class="goal-meter-track">
+        <div class="goal-meter-fill" id="cartGoalFill"></div>
+      </div>
+    </div>
+
+    <div class="cart-items-body" id="cartItemsList"></div>
+
+    <div class="cart-drawer-footer">
+      <div class="cart-summary-lines">
+        <div class="summary-row total-row">
+          <span>Total</span>
+          <span id="cartGrandTotal">₹0</span>
+        </div>
+      </div>
+      <a href="index.html#fragrances" class="btn btn-primary btn-block btn-lg">
+        Continue Shopping →
+      </a>
+    </div>
+  </aside>
+
+  <!-- Separate Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/tracker.js"></script>
+</body>
+</html>

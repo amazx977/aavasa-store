@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AAVASA Store Admin | Pre-Order & Logistics Operations</title>
+  <meta name="description" content="AAVASA Luxury Perfumes operations portal for managing customer pre-orders, batch allocations, BlueDart logistics, and live order tracking.">
+  <link rel="icon" type="image/png" href="media/Adore.png">
+
+  <!-- Core and Admin Stylesheets (Zero inline styles) -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/tracker.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Admin Top Navigation Bar -->
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-brand-wrap">
+        <a href="index.html" class="brand-logo">
+          <span class="brand-logo-text">AAVASA</span>
+          <span class="brand-logo-sub">Operations & Pre-Order Admin</span>
+        </a>
+        <span class="admin-env-pill">⚡ Live Sync Active</span>
+      </div>
+
+      <div class="admin-header-actions">
+        <div class="admin-time-display" id="adminClock">--:--:--</div>
+        <a href="index.html" class="btn btn-outline btn-sm">🏪 Storefront</a>
+        <a href="track.html" class="btn btn-outline btn-sm">📦 Public Tracker</a>
+        <button class="btn btn-secondary btn-sm" id="adminLockBtn">🔒 Lock Portal</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Main Dashboard View -->
+  <main class="admin-main">
+    <div class="admin-container">
+
+      <!-- Portal Banner -->
+      <section class="admin-banner">
+        <div class="admin-banner-text">
+          <h1>Pre-Order & Fulfillment Command Center</h1>
+          <p>
+            Manage Batch 01 allocations, monitor Kannauj laboratory maceration stages, update BlueDart AWB codes, 
+            and sync real-time tracking checkpoints directly to customer tracking screens.
+          </p>
+        </div>
+        <div class="admin-banner-actions">
+          <button class="btn btn-primary" id="openNewOrderModalBtn">
+            ➕ Create Manual Pre-Order
+          </button>
+          <button class="btn btn-outline" id="exportCsvBtn">
+            📥 Export CSV Report
+          </button>
+        </div>
+      </section>
+
+      <!-- KPI Statistics Cards -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon choco">📋</div>
+          <div class="kpi-info">
+            <span class="kpi-label">Total Pre-Orders</span>
+            <span class="kpi-value" id="kpiTotalOrders">0</span>
+            <span class="kpi-hint text-green-700">100% Verified Allocation</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon orange">💰</div>
+          <div class="kpi-info">
+            <span class="kpi-label">Pre-Order Gross Revenue</span>
+            <span class="kpi-value" id="kpiTotalRevenue">₹0</span>
+            <span class="kpi-hint text-orange-600">Avg: <strong id="kpiAov">₹0</strong></span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon cream">🧪</div>
+          <div class="kpi-info">
+            <span class="kpi-label">Batch 01 Lab & Aging</span>
+            <span class="kpi-value" id="kpiInLab">0</span>
+            <span class="kpi-hint text-choco-500">Maceration Pipeline</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon green">✈️</div>
+          <div class="kpi-info">
+            <span class="kpi-label">In Air Freight / Transit</span>
+            <span class="kpi-value" id="kpiInTransit">0</span>
+            <span class="kpi-hint text-green-700">BlueDart / Delhivery Air</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon choco">🎁</div>
+          <div class="kpi-info">
+            <span class="kpi-label">Delivered & Signed</span>
+            <span class="kpi-value" id="kpiDelivered">0</span>
+            <span class="kpi-hint text-green-700">100% Satisfaction Rate</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search, Filter & Action Toolbar -->
+      <section class="admin-toolbar-card">
+        <div class="toolbar-search-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="text" 
+            id="adminSearchInput" 
+            class="admin-search-input" 
+            placeholder="Search by Pre-Order #, Customer Name, Phone, Email, City, or AWB..."
+          >
+          <button class="admin-clear-search-btn" id="adminClearSearchBtn" title="Clear search">✕</button>
+        </div>
+
+        <div class="toolbar-filters-wrap">
+          <div class="filter-group">
+            <label for="adminStatusFilter">Status:</label>
+            <select id="adminStatusFilter" class="admin-select">
+              <option value="all">All Stages</option>
+              <option value="Pre-Order Confirmed">Pre-Order Confirmed (Batch 01)</option>
+              <option value="Lab Batch Tested">Lab Tested / Maceration</option>
+              <option value="Velvet Packed">Velvet Packed</option>
+              <option value="In Transit">In Transit</option>
+              <option value="Out for Delivery">Out for Delivery</option>
+              <option value="Delivered">Delivered</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="adminPaymentFilter">Payment:</label>
+            <select id="adminPaymentFilter" class="admin-select">
+              <option value="all">All Methods</option>
+              <option value="upi">UPI (GPay / PhonePe)</option>
+              <option value="card">Cards (Visa / Master)</option>
+              <option value="netbanking">NetBanking</option>
+              <option value="cod">Cash on Delivery</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="adminSortSelect">Sort:</label>
+            <select id="adminSortSelect" class="admin-select">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="amount-high">Amount: High to Low</option>
+              <option value="amount-low">Amount: Low to High</option>
+            </select>
+          </div>
+
+          <button class="btn btn-outline btn-sm" id="adminResetDemoBtn" title="Reset dataset to default demo pre-orders">
+            🔄 Reset Demo Data
+          </button>
+        </div>
+      </section>
+
+      <!-- Pre-Orders Management Table -->
+      <section class="admin-table-card">
+        <div class="table-header-meta">
+          <h3 id="tableCountDisplay">Showing All Pre-Orders</h3>
+          <span class="table-subtext">Click any row action to update AWB or tracking history</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Pre-Order ID</th>
+                <th>Date & Time</th>
+                <th>Customer</th>
+                <th>Fragrance Items</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Current Status</th>
+                <th>AWB / Courier</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTableBody">
+              <!-- Dynamically populated via js/admin.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-empty-state" id="adminTableEmptyState">
+          <h4>No matching pre-orders found</h4>
+          <p class="text-muted">Try clearing the search query or changing your status filter.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       MODAL 1: PRE-ORDER DETAILS INSPECTION MODAL
+       ========================================================================= -->
+  <div class="admin-modal-overlay" id="adminDetailModal">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3 id="detailModalTitle">Pre-Order Details</h3>
+        <button class="modal-close-btn" id="closeDetailModalBtn">✕</button>
+      </div>
+      <div class="admin-modal-body" id="detailModalBody">
+        <!-- Rendered by js/admin.js -->
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-outline" id="printDetailInvoiceBtn">🖨️ View Tax Invoice</button>
+        <button class="btn btn-primary" id="openEditFromDetailBtn">✏️ Update Status / Logistics</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: STATUS & LOGISTICS UPDATE MODAL (SYNCED TO LIVE TRACKER)
+       ========================================================================= -->
+  <div class="admin-modal-overlay" id="adminStatusModal">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3>Update Pre-Order Logistics & Checkpoint</h3>
+        <button class="modal-close-btn" id="closeStatusModalBtn">✕</button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="adminUpdateStatusForm">
+          <input type="hidden" id="editOrderId">
+
+          <div class="form-group mb-16">
+            <label class="form-label">Pre-Order Reference:</label>
+            <div class="admin-readonly-id" id="editOrderIdDisplay">PRE-2026-XXXX</div>
+          </div>
+
+          <div class="form-grid-2 mb-16">
+            <div class="form-group">
+              <label class="form-label" for="editStageSelect">Fulfillment Stage *</label>
+              <select class="form-input" id="editStageSelect" required>
+                <option value="1">Step 1: Pre-Order Confirmed (Batch 01 Slot)</option>
+                <option value="2">Step 2: Lab Batch Tested (6+ Hr Check Passed)</option>
+                <option value="3">Step 3: Velvet Packed (Crushproof Sealed)</option>
+                <option value="4">Step 4: Out for Delivery / In Transit</option>
+                <option value="5">Step 5: Delivered & Completed</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editStatusText">Status Display Text *</label>
+              <input type="text" class="form-input" id="editStatusText" placeholder="e.g. In Transit — Arrived at Mumbai Airport Terminal" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2 mb-16">
+            <div class="form-group">
+              <label class="form-label" for="editCourierName">Courier Partner *</label>
+              <select class="form-input" id="editCourierName">
+                <option value="BlueDart Air Express">BlueDart Air Express</option>
+                <option value="Delhivery Air Express">Delhivery Air Express</option>
+                <option value="DTDC Premium Express">DTDC Premium Express</option>
+                <option value="BlueDart Surface Cargo">BlueDart Surface Cargo</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editAwbInput">Air Waybill (AWB) Tracking # *</label>
+              <input type="text" class="form-input" id="editAwbInput" placeholder="e.g. BD-88492019" required>
+            </div>
+          </div>
+
+          <div class="form-group mb-16">
+            <label class="form-label" for="editEtaInput">Estimated Delivery / Batch Release *</label>
+            <input type="text" class="form-input" id="editEtaInput" placeholder="e.g. Batch 01 Dispatch: Oct 20" required>
+          </div>
+
+          <!-- Add New Timeline Checkpoint Log -->
+          <div class="admin-subbox mb-20">
+            <div class="admin-subbox-title">➕ Add New Real-Time Tracking Checkpoint</div>
+            <p class="admin-subbox-desc">This log will appear immediately on the customer's live tracking timeline.</p>
+            
+            <div class="form-grid-2 mb-10">
+              <div class="form-group">
+                <label class="form-label" for="newCheckpointStatus">Checkpoint Event</label>
+                <input type="text" class="form-input" id="newCheckpointStatus" placeholder="e.g. Temperature-controlled courier van dispatched">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="newCheckpointHub">Facility / Hub Location</label>
+                <input type="text" class="form-input" id="newCheckpointHub" placeholder="e.g. Mumbai Domestic Air Cargo Terminal">
+              </div>
+            </div>
+            <div class="text-choco-500 fs-xs">Leave blank if only updating status stage or AWB number.</div>
+          </div>
+
+          <div class="admin-modal-footer">
+            <button type="button" class="btn btn-outline" id="cancelStatusBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary">
+              💾 Save & Sync to Live Tracker
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: CREATE MANUAL PRE-ORDER MODAL
+       ========================================================================= -->
+  <div class="admin-modal-overlay" id="adminNewOrderModal">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3>Create Manual Customer Pre-Order</h3>
+        <button class="modal-close-btn" id="closeNewOrderModalBtn">✕</button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="adminNewOrderForm">
+          <h4 class="mb-12">1. Customer Details</h4>
+          <div class="form-grid-2 mb-12">
+            <div class="form-group">
+              <label class="form-label" for="newCustName">Customer Full Name *</label>
+              <input type="text" class="form-input" id="newCustName" placeholder="e.g. Sneha Patel" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newCustPhone">Mobile Number (10 digits) *</label>
+              <input type="tel" class="form-input" id="newCustPhone" placeholder="e.g. 9820011223" maxlength="10" required>
+            </div>
+          </div>
+
+          <div class="form-group mb-12">
+            <label class="form-label" for="newCustEmail">Customer Email Address *</label>
+            <input type="email" class="form-input" id="newCustEmail" placeholder="e.g. sneha.patel@gmail.com" required>
+          </div>
+
+          <div class="form-group mb-12">
+            <label class="form-label" for="newCustAddress">Delivery Street Address *</label>
+            <input type="text" class="form-input" id="newCustAddress" placeholder="e.g. 102, Orchid Palms, Koregaon Park" required>
+          </div>
+
+          <div class="form-grid-3 mb-16">
+            <div class="form-group">
+              <label class="form-label" for="newCustCity">City *</label>
+              <input type="text" class="form-input" id="newCustCity" placeholder="Pune" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newCustState">State *</label>
+              <input type="text" class="form-input" id="newCustState" placeholder="Maharashtra" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newCustPin">PIN Code *</label>
+              <input type="text" class="form-input" id="newCustPin" placeholder="411001" maxlength="6" required>
+            </div>
+          </div>
+
+          <h4 class="mb-12">2. Fragrance Selection</h4>
+          <div class="form-grid-2 mb-16">
+            <div class="form-group">
+              <label class="form-label" for="newProductSelect">Fragrance *</label>
+              <select class="form-input" id="newProductSelect" required>
+                <!-- Filled via products.js -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newProductQty">Quantity *</label>
+              <input type="number" class="form-input" id="newProductQty" min="1" max="10" value="1" required>
+            </div>
+          </div>
+
+          <h4 class="mb-12">3. Payment & Allocation</h4>
+          <div class="form-grid-2 mb-20">
+            <div class="form-group">
+              <label class="form-label" for="newPaymentMethod">Payment Channel *</label>
+              <select class="form-input" id="newPaymentMethod">
+                <option value="UPI">UPI (Verified)</option>
+                <option value="CARD">Credit/Debit Card</option>
+                <option value="NETBANKING">NetBanking</option>
+                <option value="COD">Cash on Delivery (Pending)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newCourierChoice">Courier Partner</label>
+              <select class="form-input" id="newCourierChoice">
+                <option value="BlueDart Air Express">BlueDart Air Express</option>
+                <option value="Delhivery Air Express">Delhivery Air Express</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-modal-footer">
+            <button type="button" class="btn btn-outline" id="cancelNewOrderBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary">
+              ✨ Create & Allocate Pre-Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: ADMIN PIN AUTHENTICATION MODAL
+       ========================================================================= -->
+  <div class="admin-modal-overlay" id="adminPinModal">
+    <div class="admin-pin-card">
+      <div class="admin-pin-icon">🔐</div>
+      <h3 class="mb-8">AAVASA Operations Lock</h3>
+      <p class="text-muted fs-sm mb-20">
+        Enter your administrative security PIN to access the pre-order and fulfillment gateway.
+      </p>
+
+      <form id="adminPinForm">
+        <div class="form-group mb-16">
+          <input 
+            type="password" 
+            class="form-input text-center admin-pin-input" 
+            id="adminPinInput" 
+            placeholder="Enter PIN (Default: admin123)" 
+            autocomplete="current-password"
+            required
+          >
+          <div class="admin-pin-hint mt-6">Hint: Default admin PIN is <strong>admin123</strong></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          Unlock Command Portal 🔓
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Separate Scripts (Zero Inline Scripts) -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
