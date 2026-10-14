@@ -343,11 +343,15 @@ const Cart = (function () {
 
     const checkoutBtn = document.getElementById('cartCheckoutBtn');
     if (checkoutBtn) {
-      checkoutBtn.addEventListener('click', () => {
-        closeDrawer();
-        if (typeof Checkout !== 'undefined') {
-          Checkout.open();
+      checkoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const totals = getTotals();
+        if (totals.items.length === 0) {
+          showToast('Your pre-order bag is empty! Please select a perfume first.');
+          return;
         }
+        closeDrawer();
+        window.location.href = 'checkout.html';
       });
     }
   });
