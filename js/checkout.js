@@ -1,13 +1,11 @@
 /**
  * AAVASA / The Bold Rose Luxury Perfumes
- * Simple Official Razorpay Standard Checkout & Order Fulfillment
- * Direct Razorpay SDK integration (Razorpay.open()) with automated BlueDart tracking & Shopify sync.
+ * Streamlined Razorpay Checkout & Real-Time Logistics Tracking
+ * Native Razorpay Standard Gateway with live BlueDart tracking (Complimentary Air Express).
  */
 
 const Checkout = (function () {
   let activeOrder = null;
-  let selectedPaymentChannel = 'razorpay'; // 'razorpay' or 'cod'
-  let selectedShippingMethod = 'standard'; // 'standard' (Free) or 'priority' (99)
 
   // =========================================================================
   // RAZORPAY API KEY CONFIGURATION
@@ -41,7 +39,6 @@ const Checkout = (function () {
     if (activeGrid) activeGrid.classList.remove('d-none');
 
     renderPageOrderSummary();
-    updatePaymentCTA();
   }
 
   function renderPageOrderSummary() {
@@ -83,20 +80,13 @@ const Checkout = (function () {
       if (discountRow) discountRow.classList.add('d-none');
     }
 
-    const priorityFee = selectedShippingMethod === 'priority' ? 99 : 0;
-    const finalShipping = totals.shipping + priorityFee;
-
+    // Complimentary Express Air Shipping
     if (shippingEl) {
-      if (finalShipping === 0) {
-        shippingEl.textContent = 'FREE';
-        shippingEl.className = 'text-green-700 font-bold';
-      } else {
-        shippingEl.textContent = `₹${finalShipping}`;
-        shippingEl.className = 'font-bold';
-      }
+      shippingEl.textContent = 'FREE';
+      shippingEl.className = 'text-green-700 font-bold';
     }
 
-    const grandTotal = Math.max(0, totals.subtotal - totals.discount + finalShipping);
+    const grandTotal = Math.max(0, totals.subtotal - totals.discount);
     if (grandTotalEl) grandTotalEl.textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
 
     updatePaymentCTA(grandTotal);
@@ -108,17 +98,11 @@ const Checkout = (function () {
 
     if (totalAmount === undefined) {
       const totals = Cart.getTotals();
-      const priorityFee = selectedShippingMethod === 'priority' ? 99 : 0;
-      totalAmount = Math.max(0, totals.subtotal - totals.discount + totals.shipping + priorityFee);
+      totalAmount = Math.max(0, totals.subtotal - totals.discount);
     }
 
-    if (selectedPaymentChannel === 'cod') {
-      payBtn.textContent = `Confirm Pre-Order via Cash on Delivery (₹${totalAmount.toLocaleString('en-IN')})`;
-      payBtn.className = 'btn btn-secondary btn-block btn-xl mt-20';
-    } else {
-      payBtn.textContent = `Pay ₹${totalAmount.toLocaleString('en-IN')} via Razorpay 🔒`;
-      payBtn.className = 'btn btn-primary btn-block btn-xl mt-20';
-    }
+    payBtn.textContent = `Pay ₹${totalAmount.toLocaleString('en-IN')} via Razorpay 🔒`;
+    payBtn.className = 'btn btn-primary btn-block btn-xl mt-20';
   }
 
   /* --------------------------------------------------------------------------
@@ -141,7 +125,7 @@ const Checkout = (function () {
     if (stateInput) stateInput.value = 'Maharashtra';
     if (pinInput) pinInput.value = '400018';
 
-    Cart.showToast('Sample address auto-filled for testing!', 'green');
+    Cart.showToast('Sample address auto-filled for preview!', 'green');
   }
 
   function validateAddressForm() {
@@ -157,15 +141,15 @@ const Checkout = (function () {
     if (!phone || phone.length < 10) { Cart.showToast('Please enter a valid 10-digit mobile number'); return false; }
     if (!email || !email.includes('@')) { Cart.showToast('Please enter a valid email address'); return false; }
     if (!address) { Cart.showToast('Please enter your delivery street address'); return false; }
+    if (!pin || pin.length < 6) { Cart.showToast('Please enter a valid 6-digit PIN code'); return false; }
     if (!city) { Cart.showToast('Please enter your delivery city'); return false; }
     if (!state) { Cart.showToast('Please enter your delivery state'); return false; }
-    if (!pin || pin.length < 6) { Cart.showToast('Please enter a valid 6-digit PIN code'); return false; }
 
     return { name, phone, email, address, city, state, pin };
   }
 
   /* --------------------------------------------------------------------------
-     3. SIMPLE OFFICIAL RAZORPAY PORTAL EXECUTION
+     3. OFFICIAL RAZORPAY STANDARD GATEWAY EXECUTION
      -------------------------------------------------------------------------- */
   async function executePreOrderPayment() {
     const address = validateAddressForm();
@@ -177,18 +161,8 @@ const Checkout = (function () {
       return;
     }
 
-    const priorityFee = selectedShippingMethod === 'priority' ? 99 : 0;
-    const finalShipping = totals.shipping + priorityFee;
-    const finalTotal = Math.max(0, totals.subtotal - totals.discount + finalShipping);
+    const finalTotal = Math.max(0, totals.subtotal - totals.discount);
 
-    // Option A: Cash on Delivery
-    if (selectedPaymentChannel === 'cod') {
-      const codRefId = 'COD-' + Math.floor(100000 + Math.random() * 900000);
-      finalizePreOrder(address, codRefId, 'CASH ON DELIVERY');
-      return;
-    }
-
-    // Option B: Official Razorpay Standard Checkout
     const key = getRazorpayKey();
     if (!key) {
       Cart.showToast('Razorpay Key ID missing. Please check configuration.');
@@ -228,10 +202,10 @@ const Checkout = (function () {
       },
       notes: {
         address: `${address.address}, ${address.city}, ${address.state} - ${address.pin}`,
-        batch: selectedShippingMethod === 'priority' ? 'VIP Batch Express' : 'Batch 01 Priority Release'
+        batch: 'Limited Batch 01 (Handcrafted Release)'
       },
       theme: {
-        color: '#c86432' // Burnt Orange Palette
+        color: '#c85a17' // Burnt Orange Palette
       },
       handler: function (response) {
         resetButton();
@@ -275,7 +249,7 @@ const Checkout = (function () {
         }
       }
     } catch (e) {
-      // Non-blocking fallback to client-side Razorpay checkout
+      // Non-blocking fallback to standard client-side Razorpay checkout
     }
 
     try {
@@ -310,9 +284,7 @@ const Checkout = (function () {
       year: 'numeric'
     });
 
-    const priorityFee = selectedShippingMethod === 'priority' ? 99 : 0;
-    const finalShipping = totals.shipping + priorityFee;
-    const finalTotal = Math.max(0, totals.subtotal - totals.discount + finalShipping);
+    const finalTotal = Math.max(0, totals.subtotal - totals.discount);
 
     const newOrder = {
       orderId: orderNum,
@@ -328,15 +300,15 @@ const Checkout = (function () {
       items: totals.items.map(i => ({ ...i })),
       subtotal: totals.subtotal,
       discount: totals.discount,
-      shipping: finalShipping,
-      shippingMethod: selectedShippingMethod,
+      shipping: 0,
+      shippingMethod: 'standard',
       total: finalTotal,
       awb: awb,
       courier: 'BlueDart Air Express (Priority Freight)',
       status: 'Pre-Order Confirmed',
       currentStage: 1, // Stage 1 of 5
       eta: etaStr,
-      paymentMethod: paymentMethodTitle,
+      paymentMethod: paymentMethodTitle || 'RAZORPAY (ONLINE)',
       paymentId: paymentId,
       source: 'checkout_razorpay',
       trackingSteps: [
@@ -413,25 +385,6 @@ const Checkout = (function () {
     // Clear cart after checkout
     Cart.clearCart();
 
-    // Push order to Shopify Admin (uncvcs-tv.myshopify.com)
-    try {
-      const shopifyToken = localStorage.getItem('aavasa_shopify_token') || '';
-      fetch('/api/shopify?action=sync-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-shopify-token': shopifyToken
-        },
-        body: JSON.stringify({ order: newOrder })
-      }).then(r => r.json()).then(res => {
-        if (res.success) {
-          console.log('Order synced to Shopify:', res);
-        }
-      }).catch(err => console.warn('Shopify sync notice:', err));
-    } catch (e) {
-      // non-blocking
-    }
-
     // Render Confirmation & Tracking Screen
     renderConfirmationTrackingScreen(newOrder);
 
@@ -466,13 +419,8 @@ const Checkout = (function () {
     if (etaEl) etaEl.textContent = order.eta;
 
     if (payBadge) {
-      if (order.paymentMethod && order.paymentMethod.includes('COD')) {
-        payBadge.textContent = 'Cash on Delivery';
-        payBadge.className = 'badge badge-orange';
-      } else {
-        payBadge.textContent = 'Paid via Razorpay';
-        payBadge.className = 'badge badge-green';
-      }
+      payBadge.textContent = 'Paid via Razorpay';
+      payBadge.className = 'badge badge-green';
     }
 
     if (subtitleEl) {
@@ -509,7 +457,7 @@ const Checkout = (function () {
 
       const totalHtml = `
         <div class="confirm-item-mini pt-8 border-top font-bold text-choco-900">
-          <span>Total Paid / Payable (${order.shippingMethod === 'priority' ? 'VIP Air Express' : 'Free Batch 01 Cargo'}):</span>
+          <span>Total Paid via Razorpay (Complimentary Air Express):</span>
           <span class="text-orange-600">₹${order.total.toLocaleString('en-IN')}</span>
         </div>
       `;
@@ -556,60 +504,6 @@ const Checkout = (function () {
           Cart.addItem('adore-edp', '100ml Luxury Flacon', 799, 'Adore Eau De Parfum', 'media/Adore.png', 1);
           initPageCheckout();
           Cart.showToast('Bestseller "Adore EDP" added! Proceed with payment below.', 'green');
-        });
-      }
-
-      // Pre-Order Batch Choice Cards
-      const batchStd = document.getElementById('batchOptionStandard');
-      const batchPrio = document.getElementById('batchOptionPriority');
-      const rStd = document.getElementById('radioStandard');
-      const rPrio = document.getElementById('radioPriority');
-
-      if (batchStd && batchPrio) {
-        batchStd.addEventListener('click', () => {
-          selectedShippingMethod = 'standard';
-          batchStd.classList.add('selected');
-          batchPrio.classList.remove('selected');
-          if (rStd) rStd.checked = true;
-          renderPageOrderSummary();
-        });
-
-        batchPrio.addEventListener('click', () => {
-          selectedShippingMethod = 'priority';
-          batchPrio.classList.add('selected');
-          batchStd.classList.remove('selected');
-          if (rPrio) rPrio.checked = true;
-          renderPageOrderSummary();
-        });
-      }
-
-      // Payment Channel toggle (Razorpay vs COD)
-      const rzpCard = document.getElementById('methodRazorpayCard');
-      const codCard = document.getElementById('methodCodCard');
-      const rzpRadio = document.getElementById('radioRazorpay');
-      const codRadio = document.getElementById('radioCod');
-      const rzpBanner = document.getElementById('razorpayBanner');
-      const codBanner = document.getElementById('codBanner');
-
-      if (rzpCard && codCard) {
-        rzpCard.addEventListener('click', () => {
-          selectedPaymentChannel = 'razorpay';
-          rzpCard.classList.add('selected');
-          codCard.classList.remove('selected');
-          if (rzpRadio) rzpRadio.checked = true;
-          if (rzpBanner) rzpBanner.classList.remove('d-none');
-          if (codBanner) codBanner.classList.add('d-none');
-          updatePaymentCTA();
-        });
-
-        codCard.addEventListener('click', () => {
-          selectedPaymentChannel = 'cod';
-          codCard.classList.add('selected');
-          rzpCard.classList.remove('selected');
-          if (codRadio) codRadio.checked = true;
-          if (codBanner) codBanner.classList.remove('d-none');
-          if (rzpBanner) rzpBanner.classList.add('d-none');
-          updatePaymentCTA();
         });
       }
 

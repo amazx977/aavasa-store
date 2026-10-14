@@ -77,164 +77,155 @@
               <div class="step-heading-wrap">
                 <div class="step-number-title">
                   <span class="step-badge-num">1</span>
-                  <h3>Delivery & Contact Details</h3>
+                  <div>
+                    <h3>Delivery & Contact Details</h3>
+                    <p class="step-desc">Enter your shipping details for insured BlueDart Air Express dispatch.</p>
+                  </div>
                 </div>
-                <button type="button" class="autofill-btn" id="autoFillAddressBtn">
-                  ⚡ Auto-Fill Sample Address
+                <button type="button" class="autofill-btn" id="autoFillAddressBtn" title="Auto-fill sample data for quick preview">
+                  ✨ Sample Address
                 </button>
               </div>
 
-              <form id="checkoutAddressForm">
-                <div class="checkout-form-grid mb-14">
+              <form id="checkoutAddressForm" novalidate>
+                <div class="checkout-form-grid mb-16">
                   <div class="form-group">
-                    <label class="form-label" for="pageCustName">Full Name *</label>
-                    <input type="text" class="form-input" id="pageCustName" placeholder="e.g. Priya Sharma" required>
+                    <label class="form-label" for="pageCustName">
+                      <span>Full Name</span>
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-wrap">
+                      <input type="text" class="form-input" id="pageCustName" placeholder="e.g. Priya Sharma" autocomplete="name" required>
+                    </div>
                   </div>
                   <div class="form-group">
-                    <label class="form-label" for="pageCustPhone">Mobile Number (10 digits) *</label>
-                    <input type="tel" class="form-input" id="pageCustPhone" placeholder="e.g. 9820144521" maxlength="10" required>
+                    <label class="form-label" for="pageCustPhone">
+                      <span>Mobile Number</span>
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-wrap phone-input-wrap">
+                      <span class="input-prefix">+91</span>
+                      <input type="tel" class="form-input has-prefix" id="pageCustPhone" placeholder="9820144521" maxlength="10" autocomplete="tel" required>
+                    </div>
+                    <span class="form-hint">For BlueDart Air Express SMS tracking & delivery OTP</span>
                   </div>
                 </div>
 
-                <div class="form-group mb-14">
-                  <label class="form-label" for="pageCustEmail">Email Address (for Razorpay Receipt & Live Tracking) *</label>
-                  <input type="email" class="form-input" id="pageCustEmail" placeholder="e.g. priya.sharma@gmail.com" required>
+                <div class="form-group mb-16">
+                  <label class="form-label" for="pageCustEmail">
+                    <span>Email Address</span>
+                    <span class="required-star">*</span>
+                  </label>
+                  <div class="input-wrap">
+                    <input type="email" class="form-input" id="pageCustEmail" placeholder="priya.sharma@gmail.com" autocomplete="email" required>
+                  </div>
+                  <span class="form-hint">Your official Razorpay tax invoice & live tracking receipt will be sent here</span>
                 </div>
 
-                <div class="form-group mb-14">
-                  <label class="form-label" for="pageCustAddress">Flat, House No., Building, Street *</label>
-                  <input type="text" class="form-input" id="pageCustAddress" placeholder="e.g. B-402, Sea Green Heights, Worli" required>
+                <div class="form-group mb-16">
+                  <label class="form-label" for="pageCustAddress">
+                    <span>Shipping Address</span>
+                    <span class="required-star">*</span>
+                  </label>
+                  <div class="input-wrap">
+                    <input type="text" class="form-input" id="pageCustAddress" placeholder="Flat / House No., Apartment, Street, Landmark" autocomplete="street-address" required>
+                  </div>
                 </div>
 
-                <div class="checkout-form-grid triple mb-10">
+                <div class="checkout-form-grid triple mb-14">
                   <div class="form-group">
-                    <label class="form-label" for="pageCustCity">City *</label>
-                    <input type="text" class="form-input" id="pageCustCity" placeholder="e.g. Mumbai" required>
+                    <label class="form-label" for="pageCustPin">
+                      <span>PIN Code (6 digits)</span>
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-wrap">
+                      <input type="text" class="form-input font-mono" id="pageCustPin" placeholder="400018" maxlength="6" autocomplete="postal-code" required>
+                    </div>
                   </div>
                   <div class="form-group">
-                    <label class="form-label" for="pageCustState">State *</label>
-                    <input type="text" class="form-input" id="pageCustState" placeholder="e.g. Maharashtra" required>
+                    <label class="form-label" for="pageCustCity">
+                      <span>City</span>
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-wrap">
+                      <input type="text" class="form-input" id="pageCustCity" placeholder="Mumbai" autocomplete="address-level2" required>
+                    </div>
                   </div>
                   <div class="form-group">
-                    <label class="form-label" for="pageCustPin">PIN Code (6 digits) *</label>
-                    <input type="text" class="form-input" id="pageCustPin" placeholder="e.g. 400018" maxlength="6" required>
+                    <label class="form-label" for="pageCustState">
+                      <span>State</span>
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-wrap">
+                      <input type="text" class="form-input" id="pageCustState" placeholder="Maharashtra" autocomplete="address-level1" required>
+                    </div>
                   </div>
+                </div>
+
+                <!-- Complimentary Courier Dispatch Note -->
+                <div class="free-courier-pill">
+                  <div class="courier-pill-icon">✈️</div>
+                  <div class="courier-pill-text">
+                    <strong>Complimentary BlueDart Air Express Cargo</strong>
+                    <span>Direct dispatch from Kannauj distillation facility • Zero shipping charge</span>
+                  </div>
+                  <span class="badge badge-green font-bold">FREE</span>
                 </div>
               </form>
             </div>
 
-            <!-- Section 2: Batch Allocation & Shipping Mode -->
-            <div class="checkout-block mb-28">
-              <div class="step-number-title mb-14">
-                <span class="step-badge-num">2</span>
-                <h3>Select Pre-Order Allocation Batch</h3>
-              </div>
-
-              <div class="shipping-batch-card selected" id="batchOptionStandard">
-                <div class="shipping-batch-meta">
-                  <input type="radio" name="shippingMethodChoice" value="standard" checked id="radioStandard">
-                  <div>
-                    <div class="shipping-batch-name">
-                      Limited Batch 01 (Handcrafted Release • Priority Dispatch)
-                    </div>
-                    <div class="shipping-batch-sub">
-                      Kannauj Lab Maceration & Gas Chromatography Tested • Free Air Express Cargo
-                    </div>
-                  </div>
-                </div>
-                <strong class="text-green-700 font-bold">FREE</strong>
-              </div>
-
-              <div class="shipping-batch-card" id="batchOptionPriority">
-                <div class="shipping-batch-meta">
-                  <input type="radio" name="shippingMethodChoice" value="priority" id="radioPriority">
-                  <div>
-                    <div class="shipping-batch-name">
-                      VIP Batch Express (First 200 Bottles from Master Distillation)
-                    </div>
-                    <div class="shipping-batch-sub">
-                      Dispatched within 24 hours of maturation completion via BlueDart Air
-                    </div>
-                  </div>
-                </div>
-                <strong class="text-choco-800 font-bold">₹99</strong>
-              </div>
-            </div>
-
-            <!-- Section 3: Razorpay Payment Gateway Portal -->
+            <!-- Section 2: Razorpay Payment Gateway Portal -->
             <div class="checkout-block mb-24">
-              <div class="step-number-title mb-14">
-                <span class="step-badge-num">3</span>
-                <h3>Payment Method</h3>
+              <div class="step-heading-wrap mb-14">
+                <div class="step-number-title">
+                  <span class="step-badge-num">2</span>
+                  <div>
+                    <h3>Payment Method</h3>
+                    <p class="step-desc">Encrypted 256-Bit SSL payment gateway via Razorpay.</p>
+                  </div>
+                </div>
               </div>
 
-              <!-- Payment Channel Choices -->
-              <div class="payment-selection-box">
-                <!-- Option 1: Razorpay Gateway -->
-                <label class="payment-method-card selected" id="methodRazorpayCard">
-                  <div class="payment-card-left">
-                    <input type="radio" name="paymentChannelChoice" value="razorpay" checked id="radioRazorpay">
+              <!-- Dedicated Razorpay Direct Card -->
+              <div class="razorpay-direct-card">
+                <div class="razorpay-card-header">
+                  <div class="razorpay-card-branding">
+                    <div class="razorpay-logo-badge">
+                      <svg width="76" height="22" viewBox="0 0 100 28" fill="none">
+                        <path d="M12 2L2 26h8l3-8h8l2-8H16l2-6h8l2-4H12z" fill="#0C2340"/>
+                        <path d="M26 10l-4 16h6l2-8h5c4.4 0 7-2.6 7-6s-2.6-6-7-6h-9zm7 4h-2l1-4h2c1.7 0 2.5.7 2.5 2s-.8 2-2.5 2z" fill="#0284C7"/>
+                      </svg>
+                    </div>
                     <div>
-                      <div class="payment-card-title">
-                        <span>Razorpay Secure Gateway</span>
-                        <span class="badge badge-orange">Fast & Recommended</span>
-                      </div>
-                      <div class="payment-card-desc">
-                        UPI (Google Pay, PhonePe, Paytm, CRED), Credit/Debit Cards, NetBanking, Wallets
-                      </div>
+                      <div class="font-bold text-choco-900">Razorpay Secure Gateway</div>
+                      <div class="text-xs text-choco-600">Instant UPI, Cards, NetBanking, CRED & Wallets</div>
                     </div>
                   </div>
-                  <div class="razorpay-logo-badge">
-                    <svg width="70" height="20" viewBox="0 0 100 28" fill="none">
-                      <path d="M12 2L2 26h8l3-8h8l2-8H16l2-6h8l2-4H12z" fill="#0C2340"/>
-                      <path d="M26 10l-4 16h6l2-8h5c4.4 0 7-2.6 7-6s-2.6-6-7-6h-9zm7 4h-2l1-4h2c1.7 0 2.5.7 2.5 2s-.8 2-2.5 2z" fill="#0284C7"/>
-                    </svg>
+                  <span class="badge badge-green">100% Secure</span>
+                </div>
+
+                <div class="razorpay-channels-grid">
+                  <div class="channel-chip">
+                    <strong>UPI QR & Apps</strong>
+                    <span class="chip-sub">GPay, PhonePe, Paytm, CRED</span>
                   </div>
-                </label>
-
-                <!-- Option 2: Cash on Delivery -->
-                <label class="payment-method-card" id="methodCodCard">
-                  <div class="payment-card-left">
-                    <input type="radio" name="paymentChannelChoice" value="cod" id="radioCod">
-                    <div>
-                      <div class="payment-card-title">
-                        <span>Cash on Delivery (COD)</span>
-                      </div>
-                      <div class="payment-card-desc">
-                        Pay upon delivery at your doorstep with cash or delivery agent's UPI QR code
-                      </div>
-                    </div>
+                  <div class="channel-chip">
+                    <strong>Debit & Credit Cards</strong>
+                    <span class="chip-sub">Visa, Mastercard, RuPay</span>
                   </div>
-                  <span class="badge badge-green">Tamper-Proof Box</span>
-                </label>
-              </div>
+                  <div class="channel-chip">
+                    <strong>NetBanking</strong>
+                    <span class="chip-sub">50+ Major Indian Banks</span>
+                  </div>
+                  <div class="channel-chip">
+                    <strong>Wallets</strong>
+                    <span class="chip-sub">Amazon Pay, MobiKwik & more</span>
+                  </div>
+                </div>
 
-              <!-- Razorpay Feature Highlights -->
-              <div class="razorpay-highlight-banner" id="razorpayBanner">
-                <div class="razorpay-banner-title">
-                  <span class="shield-icon">🛡️</span>
-                  <span>Instant 100% Secure Checkout via Razorpay</span>
+                <div class="razorpay-assurance-note">
+                  🔒 RBI 3D Secure authentication. AAVASA does not store your card details or banking passwords.
                 </div>
-                <div class="razorpay-banner-icons">
-                  <span class="rzp-icon-pill">GPay</span>
-                  <span class="rzp-icon-pill">PhonePe</span>
-                  <span class="rzp-icon-pill">Paytm</span>
-                  <span class="rzp-icon-pill">Visa / Master</span>
-                  <span class="rzp-icon-pill">RuPay</span>
-                  <span class="rzp-icon-pill">NetBanking</span>
-                  <span class="rzp-icon-pill">CRED</span>
-                </div>
-                <div class="razorpay-banner-text">
-                  Supports instant UPI QR, Google Pay, PhonePe, Credit & Debit Cards, and NetBanking with automated BlueDart Air courier dispatch.
-                </div>
-              </div>
-
-              <!-- COD Assurance Note -->
-              <div class="cod-highlight-banner d-none" id="codBanner">
-                <div class="cod-banner-title">✓ Cash on Delivery Allocation Confirmed</div>
-                <p>
-                  Zero advance payment required. Your bottle will be velvet sealed in a crushproof package with tamper-evident security tape.
-                </p>
               </div>
 
               <!-- Big Primary CTA Button -->
