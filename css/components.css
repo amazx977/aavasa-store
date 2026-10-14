@@ -377,6 +377,16 @@
   }
 }
 
+.empty-catalog-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-catalog-state h3 {
+  margin-bottom: 8px;
+}
+
 /* Individual Product Card */
 .product-card {
   background: var(--c-cream-50);

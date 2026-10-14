@@ -1041,3 +1041,17 @@ button, input, select, textarea {
   margin-top: 10px;
 }
 
+/* Tracking Banner Section */
+.tracking-banner-section {
+  background: var(--c-cream-100);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.tracking-banner-card {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+

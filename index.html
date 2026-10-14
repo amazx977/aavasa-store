@@ -54,27 +54,15 @@
         <ul class="nav-links">
           <li><a href="#fragrances" class="nav-link active">Fragrances</a></li>
           <li><a href="#discovery" class="nav-link">Discovery Sets <span class="nav-badge-pill">₹299</span></a></li>
-          <li><a href="#science" class="nav-link">Longevity Science</a></li>
-          <li><a href="#quiz" class="nav-link">Scent Matcher</a></li>
-          <li><a href="checkout.html" class="nav-link">Checkout 💳</a></li>
-          <li><a href="#track" class="nav-link">Track Order</a></li>
-          <li><a href="admin.html" class="nav-link">Admin Portal ⚙️</a></li>
+          <li><a href="#science" class="nav-link">Why Aavasa</a></li>
+          <li><a href="#reviews" class="nav-link">Reviews</a></li>
+          <li><a href="track.html" class="nav-link">Track Order</a></li>
           <li><a href="#faq" class="nav-link">FAQ</a></li>
         </ul>
       </nav>
 
       <!-- Header Action Buttons -->
       <div class="header-actions">
-        <!-- Direct Track Button -->
-        <a href="#track" class="action-btn" title="Track Your Parcel" aria-label="Track Your Order">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="3" width="15" height="13"></rect>
-            <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
-            <circle cx="5.5" cy="18.5" r="2.5"></circle>
-            <circle cx="18.5" cy="18.5" r="2.5"></circle>
-          </svg>
-        </a>
-
         <!-- Cart Button with Counter -->
         <button class="action-btn cart-action-btn cart-trigger-btn" aria-label="View Shopping Bag">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -102,12 +90,9 @@
     <ul class="mobile-nav-links">
       <li><a href="#fragrances" class="mobile-nav-link">Fragrances <span>→</span></a></li>
       <li><a href="#discovery" class="mobile-nav-link">Discovery Trial Sets <span>₹299</span></a></li>
-      <li><a href="#science" class="mobile-nav-link">Longevity Science <span>→</span></a></li>
-      <li><a href="#quiz" class="mobile-nav-link">Scent Finder Quiz <span>✨</span></a></li>
-      <li><a href="#track" class="mobile-nav-link">Track Your Order <span>📦</span></a></li>
-      <li><a href="checkout.html" class="mobile-nav-link">Pre-Order Checkout <span>💳</span></a></li>
-      <li><a href="admin.html" class="mobile-nav-link">Admin Portal <span>⚙️</span></a></li>
+      <li><a href="#science" class="mobile-nav-link">Why Aavasa <span>→</span></a></li>
       <li><a href="#reviews" class="mobile-nav-link">Customer Reviews <span>★ 4.9</span></a></li>
+      <li><a href="track.html" class="mobile-nav-link">Track Order <span>📦</span></a></li>
       <li><a href="#faq" class="mobile-nav-link">Help & FAQ <span>→</span></a></li>
     </ul>
     <div class="mobile-nav-footer-box">
@@ -140,10 +125,9 @@
           </p>
 
           <div class="hero-ctas">
-            <a href="#fragrances" class="btn btn-primary btn-lg">Explore 6+ Hr Perfumes</a>
-            <a href="#quiz" class="btn btn-secondary btn-lg">Find My Scent (Quiz)</a>
+            <a href="#fragrances" class="btn btn-primary btn-lg">Explore Fragrances</a>
             <a href="#discovery" class="btn btn-outline btn-lg text-cream-50 border-translucent">
-              Try Trial Set (₹299)
+              Try Discovery Set (₹299)
             </a>
           </div>
 
@@ -576,146 +560,17 @@
       </div>
     </section>
 
-    <!-- 7. ORDER TRACKING SECTION (FULLY FUNCTIONAL) -->
-    <section class="section-padding tracker-section" id="track">
-      <div class="container">
-        <div class="section-header">
-          <div class="section-tag green-tag">Live Logistics Gateway</div>
-          <h2 class="section-title">Track Your Luxury Pre-Order in Real-Time</h2>
-          <p class="section-desc">
-            Enter your Pre-Order ID (e.g., <strong>PRE-2026-7842</strong>) or registered phone number to view live 
-            temperature-monitored courier checkpoints and estimated delivery date.
-          </p>
-        </div>
-
-        <!-- Search Card -->
-        <div class="tracker-search-box">
-          <form class="tracker-search-form" id="trackerSearchForm">
-            <input 
-              type="text" 
-              class="tracker-search-input" 
-              id="trackerSearchInput" 
-              placeholder="Enter Pre-Order # (e.g. PRE-2026-7842) or Phone Number"
-              required
-            >
-            <button type="submit" class="btn btn-primary search-submit-btn">
-              Track Parcel 🚀
-            </button>
-          </form>
-
-          <div class="tracker-demo-chips">
-            <span class="font-bold">Try instant demo tracking:</span>
-            <button class="demo-chip-btn" data-orderid="PRE-2026-7842">#PRE-2026-7842 [Out for Delivery]</button>
-            <button class="demo-chip-btn" data-orderid="PRE-2026-5510">#PRE-2026-5510 [In Transit]</button>
-            <button class="demo-chip-btn" data-orderid="PRE-2026-3199">#PRE-2026-3199 [Delivered]</button>
-            <button class="demo-chip-btn" data-orderid="PRE-2026-9214">#PRE-2026-9214 [Pre-Order Lab]</button>
-          </div>
-        </div>
-
-        <!-- Dynamic Tracking Result Area -->
-        <div class="tracking-result-area" id="trackingResultArea">
-          <div class="tracking-card">
-            <!-- Status Header -->
-            <div class="tracking-header">
-              <div class="tracking-order-meta">
-                <h3 id="trackOrderIdTitle">Order AAV-2026-7842</h3>
-                <div class="tracking-awb-line">
-                  <span>Courier: <strong id="trackCourierName">BlueDart Air Express</strong></span>
-                  <span>•</span>
-                  <span>AWB: <strong id="trackAwbCode">BD-88492019</strong></span>
-                  <button class="copy-awb-btn" id="copyAwbBtn" title="Copy tracking number">Copy AWB</button>
-                </div>
-              </div>
-              <div class="tracking-eta-box">
-                <div class="eta-label">Estimated Delivery</div>
-                <div class="eta-date" id="trackEtaDisplay">Today by 6:00 PM</div>
-                <div class="mt-6">
-                  <span class="tracking-status-badge in-transit" id="trackStatusBadge">In Transit</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Stepper Progress Bar -->
-            <div class="tracking-stepper-wrap">
-              <div class="stepper-track">
-                <div class="stepper-progress-fill" id="stepperProgressFill"></div>
-                
-                <div class="stepper-node completed" data-step="1">
-                  <div class="node-icon-circle">✓</div>
-                  <div class="node-title">Order Confirmed</div>
-                  <div class="node-time">Payment Verified</div>
-                </div>
-
-                <div class="stepper-node completed" data-step="2">
-                  <div class="node-icon-circle">✓</div>
-                  <div class="node-title">Lab Batch Tested</div>
-                  <div class="node-time">6+ Hr Check Passed</div>
-                </div>
-
-                <div class="stepper-node completed" data-step="3">
-                  <div class="node-icon-circle">✓</div>
-                  <div class="node-title">Velvet Packed</div>
-                  <div class="node-time">Crushproof Box</div>
-                </div>
-
-                <div class="stepper-node active" data-step="4">
-                  <div class="node-icon-circle">🚚</div>
-                  <div class="node-title">Out for Delivery</div>
-                  <div class="node-time">Courier Handover</div>
-                </div>
-
-                <div class="stepper-node" data-step="5">
-                  <div class="node-icon-circle">🎁</div>
-                  <div class="node-title">Delivered</div>
-                  <div class="node-time">Package Handover</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Two-Column Details -->
-            <div class="tracking-details-grid">
-              <!-- Transit Logs -->
-              <div class="timeline-logs">
-                <h4>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                  </svg>
-                  Live Transit Checkpoints
-                </h4>
-                <div class="logs-list" id="trackingLogsList"></div>
-              </div>
-
-              <!-- Package Breakdown & Address -->
-              <div class="tracking-items-box">
-                <h4>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                  </svg>
-                  Package Contents
-                </h4>
-                <div id="trackingPackageItems"></div>
-                <div class="tracking-address-box" id="trackingAddressBox"></div>
-              </div>
-            </div>
-
-            <!-- Actions Bar -->
-            <div class="tracking-actions-bar">
-              <div class="tracker-helper-text">
-                Need to reschedule delivery? Contact BlueDart VIP Desk at <strong>1800 209 1234</strong>
-              </div>
-              <div class="btn-group-row">
-                <button class="btn btn-outline btn-sm" id="openInvoiceBtn">
-                  📄 View Tax Invoice
-                </button>
-                <a href="https://wa.me/919820012345?text=Hi%20AAVASA%20Support,%20I%20have%20a%20query%20about%20my%20order" target="_blank" class="btn btn-secondary btn-sm">
-                  💬 WhatsApp Support
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- 7. ORDER TRACKING GATEWAY BANNER -->
+    <section class="section-padding tracking-banner-section" id="track">
+      <div class="container tracking-banner-card">
+        <div class="section-tag green-tag">Live Air Courier Dispatch</div>
+        <h2 class="section-title">Track Your Luxury Fragrance Parcel</h2>
+        <p class="section-desc mb-24">
+          Already reserved your bottle? Check live temperature-controlled BlueDart &amp; Delhivery air transit checkpoints on our dedicated tracking portal.
+        </p>
+        <a href="track.html" class="btn btn-primary btn-lg">
+          Open Live Order Tracker 📦
+        </a>
       </div>
     </section>
 
@@ -890,9 +745,8 @@
         <div class="footer-col">
           <h4>Support & Track</h4>
           <ul class="footer-links">
-            <li><a href="#track" class="footer-link">Track Your Order</a></li>
-            <li><a href="admin.html" class="footer-link">Admin Portal ⚙️</a></li>
-            <li><a href="#science" class="footer-link">Longevity Test Reports</a></li>
+            <li><a href="track.html" class="footer-link">Track Your Order</a></li>
+            <li><a href="#science" class="footer-link">Why Aavasa (Longevity)</a></li>
             <li><a href="#faq" class="footer-link">Shipping & Delivery Policy</a></li>
             <li><a href="#faq" class="footer-link">Returns & Refunds</a></li>
             <li><a href="https://wa.me/919820012345" target="_blank" class="footer-link">WhatsApp Perfume Helpdesk</a></li>
@@ -921,7 +775,7 @@
         <div class="footer-bottom-links">
           <a href="#faq">Privacy Policy</a>
           <a href="#faq">Terms of Service</a>
-          <a href="#track">Live Parcel Status</a>
+          <a href="track.html">Live Parcel Status</a>
         </div>
       </div>
     </div>
@@ -1032,350 +886,9 @@
     </div>
   </div>
 
-  <!-- Interactive Payment Portal Modal (Fully Functional Gateway) -->
-  <div class="checkout-modal-wrap" id="checkoutModal">
-    <div class="checkout-card">
-      <div class="checkout-header">
-        <div class="checkout-title">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-            <line x1="1" y1="10" x2="23" y2="10"></line>
-          </svg>
-          <span>AAVASA Pre-Order Reserve Portal</span>
-        </div>
-        <div class="flex-align-gap">
-          <span class="checkout-security-tag">🔒 256-Bit SSL Encrypted</span>
-          <button class="cart-close-btn border-contrast-btn" id="checkoutCloseBtn">✕</button>
-        </div>
-      </div>
-
-      <!-- Processing Overlay (Simulated Gateway Handshake) -->
-      <div class="payment-processing-overlay" id="paymentProcessingOverlay">
-        <div class="processing-spinner"></div>
-        <h3 class="font-serif fs-md mb-8">Securing Pre-Order Allocation</h3>
-        <p id="processingStatusText" class="text-choco-500 fs-sm">Securing your limited batch reservation...</p>
-        <div class="rbi-compliance-note">
-          🛡️ RBI Mandated 3D Secure Compliance Active
-        </div>
-      </div>
-
-      <!-- Order Placed Success Screen -->
-      <div class="order-success-screen" id="orderSuccessScreen">
-        <div class="success-check-icon">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-        <h2 class="font-serif mb-8">Pre-Order Reserved Successfully!</h2>
-        <p class="text-muted mb-24">
-          Thank you for choosing AAVASA Perfumes. Your 6+ hour longevity bottle from Limited Batch 01 has been reserved.
-        </p>
-
-        <div class="success-details-card">
-          <div class="summary-detail-row">
-            <span class="meta-field-label">Pre-Order Reference ID:</span>
-            <strong id="successOrderIdDisplay" class="fs-md text-orange-600">PRE-2026-7842</strong>
-          </div>
-          <div class="summary-detail-row">
-            <span class="meta-field-label">Pre-Order Tracking AWB:</span>
-            <strong id="successAwbDisplay">BD-88492019</strong>
-          </div>
-          <div class="summary-detail-row">
-            <span class="meta-field-label">Batch Dispatch:</span>
-            <strong id="successEtaDisplay" class="text-green-700">Batch 01 Priority Release</strong>
-          </div>
-        </div>
-
-        <div class="btn-group-row flex-center">
-          <button class="btn btn-primary btn-lg" id="trackPlacedOrderBtn">
-            Track My Pre-Order 📦
-          </button>
-          <button class="btn btn-secondary btn-lg" id="successContinueShoppingBtn">
-            Continue Browsing
-          </button>
-        </div>
-      </div>
-
-      <!-- Checkout Form Body -->
-      <div class="checkout-body" id="checkoutBody">
-        <!-- Left Column: Steps -->
-        <div class="checkout-steps-col">
-          <!-- Stepper Indicator -->
-          <div class="checkout-steps">
-            <div class="step-item active">
-              <span class="step-bubble">1</span>
-              <span>Address</span>
-            </div>
-            <div class="step-item">
-              <span class="step-bubble">2</span>
-              <span>Batch Allocation</span>
-            </div>
-            <div class="step-item">
-              <span class="step-bubble">3</span>
-              <span>Pre-Order Payment</span>
-            </div>
-          </div>
-
-          <!-- Step 1: Address -->
-          <div id="checkoutStep1">
-            <h4 class="mb-16">1. Shipping & Contact Details</h4>
-            <form id="checkoutAddressForm">
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="custName">Full Name *</label>
-                  <input type="text" class="form-input" id="custName" placeholder="e.g. Priya Sharma" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="custPhone">Mobile Number (10 digits) *</label>
-                  <input type="tel" class="form-input" id="custPhone" placeholder="e.g. 9820144521" maxlength="10" required>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="custEmail">Email Address (for Invoice & Live Tracking) *</label>
-                <input type="email" class="form-input" id="custEmail" placeholder="e.g. priya@gmail.com" required>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="custAddress">Flat, House No., Building, Street *</label>
-                <input type="text" class="form-input" id="custAddress" placeholder="e.g. 402, Sea Green Heights, Worli" required>
-              </div>
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="custCity">City *</label>
-                  <input type="text" class="form-input" id="custCity" placeholder="e.g. Mumbai" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="custState">State *</label>
-                  <input type="text" class="form-input" id="custState" placeholder="e.g. Maharashtra" required>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="custPin">PIN Code (6 digits) *</label>
-                <input type="text" class="form-input" id="custPin" placeholder="e.g. 400018" maxlength="6" required>
-              </div>
-
-              <button type="button" class="btn btn-primary btn-block" id="toStep2Btn">
-                Continue to Batch Allocation →
-              </button>
-            </form>
-          </div>
-
-          <!-- Step 2: Shipping Method & Pre-Order Batch -->
-          <div id="checkoutStep2" class="d-none">
-            <h4 class="mb-16">2. Select Pre-Order Delivery Batch</h4>
-            <div class="flex-col-gap mb-24">
-              <label class="shipping-radio-active">
-                <div class="flex-align-gap">
-                  <input type="radio" name="shippingMethod" value="standard" checked>
-                  <div>
-                    <div class="text-choco-800 font-bold">Limited Batch 01 (Handcrafted Release • Priority Dispatch)</div>
-                    <div class="text-choco-500 fs-xs">Reserved Lab Slot • Fragrance Safe Cushioning • Dispatches Early Next Month</div>
-                  </div>
-                </div>
-                <strong class="text-green-700">FREE</strong>
-              </label>
-
-              <label class="shipping-radio-standard">
-                <div class="flex-align-gap">
-                  <input type="radio" name="shippingMethod" value="priority">
-                  <div>
-                    <div class="text-choco-800 font-bold">VIP Batch Express (First 200 Bottles Priority Air Freight)</div>
-                    <div class="text-choco-500 fs-xs">First dispatched queue directly from master distillation lab</div>
-                  </div>
-                </div>
-                <strong>₹99</strong>
-              </label>
-            </div>
-
-            <div class="btn-group-row">
-              <button class="btn btn-outline" id="backToStep1Btn">← Back</button>
-              <button class="btn btn-primary flex-grow" id="toStep3Btn">Continue to Pre-Order Payment →</button>
-            </div>
-          </div>
-
-          <!-- Step 3: Payment Options -->
-          <div id="checkoutStep3" class="d-none">
-            <h4 class="mb-16">3. Confirm Pre-Order Payment</h4>
-            
-            <!-- Payment Method Tabs -->
-            <div class="payment-tabs">
-              <button class="payment-tab-btn active" data-method="upi">
-                <span>📱 UPI</span>
-                <span class="text-green-700 sub-badge-label">GPay / PhonePe</span>
-              </button>
-              <button class="payment-tab-btn" data-method="card">
-                <span>💳 Card</span>
-                <span class="sub-badge-label">Debit / Credit</span>
-              </button>
-              <button class="payment-tab-btn" data-method="netbanking">
-                <span>🏦 NetBanking</span>
-                <span class="sub-badge-label">All Banks</span>
-              </button>
-              <button class="payment-tab-btn" data-method="cod">
-                <span>💵 COD</span>
-                <span class="sub-badge-label">Cash on Delivery</span>
-              </button>
-            </div>
-
-            <!-- UPI Panel -->
-            <div id="upiPanel">
-              <div class="upi-box">
-                <div class="qr-code-display">
-                  <svg viewBox="0 0 100 100" fill="var(--c-choco-900)">
-                    <rect x="5" y="5" width="28" height="28" fill="none" stroke="currentColor" stroke-width="6"/>
-                    <rect x="13" y="13" width="12" height="12"/>
-                    <rect x="67" y="5" width="28" height="28" fill="none" stroke="currentColor" stroke-width="6"/>
-                    <rect x="75" y="13" width="12" height="12"/>
-                    <rect x="5" y="67" width="28" height="28" fill="none" stroke="currentColor" stroke-width="6"/>
-                    <rect x="13" y="75" width="12" height="12"/>
-                    <rect x="42" y="10" width="8" height="16"/>
-                    <rect x="40" y="38" width="20" height="20"/>
-                    <rect x="68" y="44" width="12" height="8"/>
-                    <rect x="44" y="68" width="10" height="22"/>
-                    <rect x="70" y="72" width="20" height="18"/>
-                  </svg>
-                </div>
-                <div class="text-choco-800 font-bold fs-sm mb-4">
-                  Scan with any UPI App to Pre-Order <span id="upiAmountDisplay" class="text-orange-600">₹0</span>
-                </div>
-                <div class="text-choco-500 fs-xs mb-12">
-                  Google Pay • PhonePe • Paytm • BHIM • Cred
-                </div>
-                <div class="upi-id-pill">
-                  <span>aavasa.perfumes@icici</span>
-                  <button type="button" class="copy-awb-btn" id="copyUpiBtn">Copy</button>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="userUpiId">Or Enter your UPI ID</label>
-                <div class="flex-gap-8">
-                  <input type="text" class="form-input" id="userUpiId" placeholder="e.g. yourname@okaxis">
-                  <button type="button" class="btn btn-secondary btn-sm" id="verifyUpiBtn">Verify</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card Panel -->
-            <div id="cardPanel" class="d-none">
-              <!-- Interactive Visual Card Mockup -->
-              <div class="card-mockup">
-                <div class="card-mockup-top">
-                  <span class="card-chip-label">SECURE CHIP</span>
-                  <strong id="mockCardBrand" class="font-serif text-orange-400 fs-md">CARD</strong>
-                </div>
-                <div class="card-mockup-number" id="mockCardNumber">•••• •••• •••• ••••</div>
-                <div class="card-mockup-bot">
-                  <div>
-                    <div class="card-field-micro">CARDHOLDER</div>
-                    <div id="mockCardHolder" class="font-bold">YOUR NAME</div>
-                  </div>
-                  <div>
-                    <div class="card-field-micro">EXPIRES</div>
-                    <div id="mockCardExpiry" class="font-bold">MM/YY</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="cardNumInput">16-Digit Card Number *</label>
-                <input type="text" class="form-input" id="cardNumInput" placeholder="4111 2222 3333 4444" maxlength="19">
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="cardNameInput">Cardholder Name *</label>
-                <input type="text" class="form-input" id="cardNameInput" placeholder="Name as on card">
-              </div>
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="cardExpInput">Expiry (MM/YY) *</label>
-                  <input type="text" class="form-input" id="cardExpInput" placeholder="12/28" maxlength="5">
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="cardCvvInput">CVV / CVC *</label>
-                  <input type="password" class="form-input" id="cardCvvInput" placeholder="•••" maxlength="4">
-                </div>
-              </div>
-            </div>
-
-            <!-- Net Banking Panel -->
-            <div id="netbankingPanel" class="d-none">
-              <div class="text-choco-800 font-bold fs-sm mb-12">Popular Indian Banks:</div>
-              <div class="bank-grid-2">
-                <label class="bank-radio-label">
-                  <input type="radio" name="bankSelect" value="hdfc" checked> HDFC Bank
-                </label>
-                <label class="bank-radio-label">
-                  <input type="radio" name="bankSelect" value="icici"> ICICI Bank
-                </label>
-                <label class="bank-radio-label">
-                  <input type="radio" name="bankSelect" value="sbi"> State Bank of India
-                </label>
-                <label class="bank-radio-label">
-                  <input type="radio" name="bankSelect" value="axis"> Axis Bank
-                </label>
-              </div>
-            </div>
-
-            <!-- Cash On Delivery Panel -->
-            <div id="codPanel" class="d-none">
-              <div class="cod-banner">
-                <div class="cod-title">✓ Verified Cash on Delivery Available</div>
-                <p class="cod-text">
-                  Pay in cash or scan the courier's QR code on delivery. Your perfume will be sealed in tamper-proof security tape.
-                </p>
-              </div>
-              <div class="text-choco-500 fs-xs">
-                A 1-click SMS verification code will be sent to your mobile upon confirmation.
-              </div>
-            </div>
-
-            <div class="btn-group-row mt-24">
-              <button class="btn btn-outline" id="backToStep2Btn">← Back</button>
-              <button class="btn btn-primary flex-grow" id="executePaymentBtn">
-                Confirm Pre-Order 🔒
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column: Order Summary -->
-        <div class="checkout-summary-col">
-          <h4 class="mb-16">Order Summary</h4>
-          <div class="order-mini-list" id="checkoutMiniList"></div>
-
-          <div class="checkout-totals-block">
-            <div class="flex-between">
-              <span class="text-choco-500">Items Total</span>
-              <span id="checkoutSubtotal">₹0</span>
-            </div>
-            <div class="text-green-700 flex-between d-none" id="checkoutDiscountRow">
-              <span>Discount</span>
-              <span id="checkoutDiscount">-₹0</span>
-            </div>
-            <div class="flex-between">
-              <span class="text-choco-500">Express Shipping</span>
-              <span id="checkoutShipping" class="text-green-700 font-bold">FREE</span>
-            </div>
-            <div class="payable-row">
-              <span>Total Payable</span>
-              <span id="checkoutGrandTotal" class="text-orange-600">₹0</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Separate Scripts (Linked Cleanly) -->
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
-  <script src="js/checkout.js"></script>
-  <script src="js/tracker.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

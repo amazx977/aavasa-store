@@ -64,33 +64,6 @@ const App = (function () {
         Cart.showToast('Thank you for subscribing! Use coupon code AAVASA15 at checkout.', 'green');
       });
     }
-
-    // UPI Copy & Verify buttons in payment modal
-    const copyUpiBtn = document.getElementById('copyUpiBtn');
-    if (copyUpiBtn) {
-      copyUpiBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText('aavasa.perfumes@icici').then(() => {
-          Cart.showToast('UPI ID copied to clipboard!', 'green');
-        });
-      });
-    }
-
-    const verifyUpiBtn = document.getElementById('verifyUpiBtn');
-    if (verifyUpiBtn) {
-      verifyUpiBtn.addEventListener('click', () => {
-        const upiInput = document.getElementById('userUpiId');
-        if (upiInput && upiInput.value.includes('@')) {
-          Cart.showToast('UPI ID verified successfully! Click Complete Order below.', 'green');
-        } else {
-          Cart.showToast('Please enter a valid UPI ID (e.g. name@bank)');
-        }
-      });
-    }
-
-    const continueShoppingBtn = document.getElementById('successContinueShoppingBtn');
-    if (continueShoppingBtn) {
-      continueShoppingBtn.addEventListener('click', () => Checkout.close());
-    }
   }
 
   /* --------------------------------------------------------------------------
@@ -120,9 +93,9 @@ const App = (function () {
 
     if (items.length === 0) {
       grid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
-          <h3 style="margin-bottom: 8px;">No fragrances found in this category</h3>
-          <p style="color: var(--text-muted);">Please select a different category filter.</p>
+        <div class="empty-catalog-state">
+          <h3>No fragrances found in this category</h3>
+          <p class="text-muted">Please select a different category filter.</p>
         </div>
       `;
       return;
@@ -166,16 +139,6 @@ const App = (function () {
 
             <div class="notes-teaser">
               ${notesPills}
-            </div>
-
-            <div class="longevity-meter">
-              <div class="meter-header">
-                <span>Anti-Evaporation Rating</span>
-                <span class="score">${p.longevityScore} / 10</span>
-              </div>
-              <div class="meter-bar">
-                <div class="meter-fill" style="width: ${p.longevityScore * 10}%;"></div>
-              </div>
             </div>
 
             <div class="card-footer">
