@@ -11,9 +11,9 @@ const Checkout = (function () {
 
   // =========================================================================
   // RAZORPAY API KEY CONFIGURATION
-  // Paste your Razorpay Key ID directly below:
+  // Official Razorpay Standard Key ID:
   // =========================================================================
-  const CONFIG_RAZORPAY_KEY = ''; // <-- Paste your Razorpay Key ID (e.g. 'rzp_test_xxxx' or 'rzp_live_xxxx')
+  const CONFIG_RAZORPAY_KEY = 'rzp_test_TnpHm6W02JydRs';
 
   function getRazorpayKey() {
     return CONFIG_RAZORPAY_KEY || (localStorage.getItem('aavasa_razorpay_key_id') || '').trim();
@@ -167,7 +167,7 @@ const Checkout = (function () {
   /* --------------------------------------------------------------------------
      3. SIMPLE OFFICIAL RAZORPAY PORTAL EXECUTION
      -------------------------------------------------------------------------- */
-  function executePreOrderPayment() {
+  async function executePreOrderPayment() {
     const address = validateAddressForm();
     if (!address) return;
 
@@ -191,13 +191,27 @@ const Checkout = (function () {
     // Option B: Official Razorpay Standard Checkout
     const key = getRazorpayKey();
     if (!key) {
-      Cart.showToast('Please provide your Razorpay Key ID to enable payment.');
+      Cart.showToast('Razorpay Key ID missing. Please check configuration.');
       return;
     }
 
     if (typeof Razorpay === 'undefined') {
-      Cart.showToast('Connecting to Razorpay...');
+      Cart.showToast('Loading Razorpay secure gateway...');
       return;
+    }
+
+    const payBtn = document.getElementById('proceedToPayBtn');
+    const originalBtnText = payBtn ? payBtn.textContent : '';
+    if (payBtn) {
+      payBtn.disabled = true;
+      payBtn.textContent = 'Connecting to Razorpay Secure Gateway...';
+    }
+
+    function resetButton() {
+      if (payBtn) {
+        payBtn.disabled = false;
+        payBtn.textContent = originalBtnText;
+      }
     }
 
     const options = {
@@ -220,25 +234,60 @@ const Checkout = (function () {
         color: '#c86432' // Burnt Orange Palette
       },
       handler: function (response) {
-        // Razorpay payment successfully authorized!
+        resetButton();
         const paymentId = response.razorpay_payment_id || ('pay_' + Math.random().toString(36).substring(2, 14));
         finalizePreOrder(address, paymentId, 'RAZORPAY (ONLINE)');
       },
       modal: {
         ondismiss: function () {
+          resetButton();
           Cart.showToast('Payment window closed.');
         }
       }
     };
 
+    // Try creating a verified server-side Razorpay order
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+      const serverRes = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: finalTotal,
+          currency: 'INR',
+          receipt: 'rcpt_' + Date.now(),
+          notes: {
+            customer: address.name,
+            phone: address.phone
+          }
+        }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (serverRes.ok) {
+        const orderData = await serverRes.json();
+        if (orderData && orderData.success && orderData.order && orderData.order.id) {
+          options.order_id = orderData.order.id;
+        }
+      }
+    } catch (e) {
+      // Non-blocking fallback to client-side Razorpay checkout
+    }
+
     try {
       const rzp = new Razorpay(options);
       rzp.on('payment.failed', function (resp) {
+        resetButton();
         const errDesc = resp.error ? resp.error.description : 'Payment failed';
         Cart.showToast(`Razorpay transaction note: ${errDesc}`);
       });
       rzp.open();
     } catch (err) {
+      resetButton();
       console.error('Error opening Razorpay checkout:', err);
       Cart.showToast('Could not open Razorpay checkout. Please verify Key ID.');
     }

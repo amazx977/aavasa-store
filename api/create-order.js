@@ -27,13 +27,16 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_TnpHm6W02JydRs';
+  const keySecret = process.env.RAZORPAY_KEY_SECRET || '';
+
   // Allow GET request to check gateway health/status
   if (req.method === 'GET') {
-    const isConfigured = Boolean(BACKEND_RAZORPAY_KEY_ID && BACKEND_RAZORPAY_KEY_SECRET);
+    const isConfigured = Boolean(keyId && keySecret);
     return res.status(200).json({
       status: 'active',
       configured: isConfigured,
-      keyId: isConfigured ? BACKEND_RAZORPAY_KEY_ID : null
+      keyId: keyId
     });
   }
 
